@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import apiClient, {
   getAuthAccessToken,
+  safeStorageGet,
+  safeStorageSet,
   setAuthAccessToken,
 } from '../lib/axios';
 import type { ApiSuccessResponse, AuthUser } from '../types';
@@ -30,9 +32,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       const { user, token } = res.data.data;
       setAuthAccessToken(token);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(SESSION_HINT_KEY, '1');
-      }
+      safeStorageSet(SESSION_HINT_KEY, '1');
       set({ user, isLoading: false, isInitialized: true });
       return user;
     } catch (err) {
@@ -48,9 +48,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // Clear local session regardless of network response
     }
     setAuthAccessToken(null);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(SESSION_HINT_KEY);
-    }
+    safeStorageSet(SESSION_HINT_KEY, null);
     set({ user: null, isInitialized: true });
   },
 
@@ -59,9 +57,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     const existingToken = getAuthAccessToken();
     const hasSessionHint =
-      Boolean(existingToken) ||
-      (typeof window !== 'undefined' &&
-        localStorage.getItem(SESSION_HINT_KEY) === '1');
+      Boolean(existingToken) || safeStorageGet(SESSION_HINT_KEY) === '1';
 
     if (!hasSessionHint && !force) {
       set({ user: null, isInitialized: true, isLoading: false });
@@ -79,11 +75,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isInitialized: true,
       });
     } catch {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem(SESSION_HINT_KEY);
-      }
+      safeStorageSet(SESSION_HINT_KEY, null);
       setAuthAccessToken(null);
       set({ user: null, isLoading: false, isInitialized: true });
     }
   },
 }));
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('vph:auth-expired', () => {
+    safeStorageSet(SESSION_HINT_KEY, null);
+    useAuthStore.setState({ user: null, isInitialized: true, isLoading: false });
+  });
+}

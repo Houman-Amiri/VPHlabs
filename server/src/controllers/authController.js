@@ -6,9 +6,19 @@ const { AppError, asyncHandler } = require('../middlewares/errorHandler');
 const { AUTH_COOKIE_NAME } = require('../middlewares/auth');
 
 function buildCookieOptions(req) {
+  const origin = String(req?.headers?.origin || '');
+  const referer = String(req?.headers?.referer || '');
+  const proto = String(req?.headers?.['x-forwarded-proto'] || '');
+  const fwdHost = String(
+    req?.headers?.['x-forwarded-host'] || req?.headers?.host || ''
+  );
+
   const isHttps =
     Boolean(req?.secure) ||
-    req?.headers?.['x-forwarded-proto'] === 'https' ||
+    proto.includes('https') ||
+    origin.startsWith('https://') ||
+    referer.startsWith('https://') ||
+    fwdHost.includes('.e2b.app') ||
     env.cookieSecure;
 
   return {

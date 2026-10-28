@@ -4,21 +4,38 @@ const userRepository = require('../repositories/userRepository');
 const { AppError } = require('./errorHandler');
 
 const AUTH_COOKIE_NAME = 'vph_token';
+const CUSTOM_AUTH_HEADER = 'x-vph-auth';
 
 function extractToken(req) {
+  // 1. Proxy-safe custom header (survives edge proxies like *.e2b.app that strip Authorization)
+  const customHeader = req.headers[CUSTOM_AUTH_HEADER];
+  if (typeof customHeader === 'string' && customHeader.trim()) {
+    const raw = customHeader.trim();
+    return raw.startsWith('Bearer ') ? raw.slice(7).trim() : raw;
+  }
+
+  // 2. Standard RFC 6750 Authorization: Bearer <token>
   const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  if (typeof authHeader === 'string' && authHeader.startsWith('Bearer ')) {
     const bearer = authHeader.slice(7).trim();
     if (bearer) return bearer;
   }
+
+  // 3. HttpOnly cookie (Partitioned SameSite=None over HTTPS, Lax on localhost HTTP)
   if (req.cookies && req.cookies[AUTH_COOKIE_NAME]) {
     return req.cookies[AUTH_COOKIE_NAME];
   }
+
+  // 4. Last-resort fallback when both custom headers and iframe cookies are stripped by an intermediate proxy
+  if (req.query && typeof req.query._vph_auth === 'string' && req.query._vph_auth.trim()) {
+    return req.query._vph_auth.trim();
+  }
+
   return null;
 }
 
 /**
- * Verifies JWT from httpOnly cookie or Authorization Bearer header,
+ * Verifies JWT from X-VPH-Auth header, Authorization Bearer header, or httpOnly cookie,
  * confirms user is active, and attaches `req.user`.
  */
 function requireAuth(req, _res, next) {
@@ -103,6 +120,8 @@ function requireRole(...allowedRoles) {
 
 module.exports = {
   AUTH_COOKIE_NAME,
+  CUSTOM_AUTH_HEADER,
+  extractToken,
   requireAuth,
   optionalAuth,
   requireRole,

@@ -12,6 +12,7 @@ const logger = pino({
   redact: {
     paths: [
       'req.headers.authorization',
+      'req.headers["x-vph-auth"]',
       'req.headers.cookie',
       'password',
       'password_hash',
@@ -22,8 +23,15 @@ const logger = pino({
   },
 });
 
+morgan.token('safe-url', (req) =>
+  (req.originalUrl || req.url || '').replace(
+    /([?&]_vph_auth=)[^&]+/g,
+    '$1[REDACTED]'
+  )
+);
+
 const httpLogger = morgan(
-  ':remote-addr :method :url :status :res[content-length] - :response-time ms',
+  ':remote-addr :method :safe-url :status :res[content-length] - :response-time ms',
   {
     skip: () => env.isTest,
     stream: {

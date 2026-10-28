@@ -11,10 +11,12 @@ export default defineConfig({
       '/api': {
         target: 'http://127.0.0.1:4000',
         changeOrigin: true,
+        xfwd: true,
       },
       '/uploads': {
         target: 'http://127.0.0.1:4000',
         changeOrigin: true,
+        xfwd: true,
       },
       '/sitemap.xml': {
         target: 'http://127.0.0.1:4000',

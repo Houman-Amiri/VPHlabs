@@ -138,7 +138,12 @@ test('Team CRUD & Bearer-first Auth: Admin can manage colleagues with LinkedIn &
 
   await request(app)
     .delete(`/api/team/${created.body.data.id}`)
-    .set('Authorization', `Bearer ${adminToken}`)
+    .set('X-VPH-Auth', adminToken)
+    .expect(200);
+
+  // Verify fallback when intermediate proxy strips Authorization & X-VPH-Auth and blocks cookies
+  await request(app)
+    .get(`/api/admin/stats?_vph_auth=${encodeURIComponent(adminToken)}`)
     .expect(200);
 });
 
