@@ -1080,6 +1080,20 @@ function seedDatabase() {
     });
     seededAdmin = true;
     logger.info({ email: env.seedAdminEmail }, 'Seeded initial admin user');
+  } else {
+    const legacyAdmin = userRepository.findByEmailWithHash('admin@vphlabs.com');
+    const targetAdmin = userRepository.findByEmailWithHash(env.seedAdminEmail);
+    if (legacyAdmin && !targetAdmin) {
+      const hash = bcrypt.hashSync(env.seedAdminPassword, 12);
+      userRepository.updateCredentials(legacyAdmin.id, {
+        email: env.seedAdminEmail,
+        password_hash: hash,
+      });
+      logger.info(
+        { email: env.seedAdminEmail },
+        'Migrated legacy default admin credentials'
+      );
+    }
   }
 
   if (bannerRepository.countAll() === 0) {

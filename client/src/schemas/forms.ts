@@ -52,7 +52,7 @@ export const contactFormSchema = z.object({
 export type ContactFormValues = z.input<typeof contactFormSchema>;
 
 export const adminLoginFormSchema = z.object({
-  email: z.string().trim().email('فرمت ایمیل معتبر نیست.'),
+  email: z.string().trim().min(3, 'لطفاً نام کاربری را وارد کنید.'),
   password: z.string().min(6, 'رمز عبور باید حداقل ۶ کاراکتر باشد.'),
 });
 

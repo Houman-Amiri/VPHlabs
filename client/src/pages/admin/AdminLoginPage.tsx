@@ -103,15 +103,15 @@ export function AdminLoginPage() {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="form-group">
             <label htmlFor="admin-email" className="form-label">
-              پست الکترونیک مدیر
+              نام کاربری مدیر
             </label>
             <input
               id="admin-email"
-              type="email"
+              type="text"
               dir="ltr"
               autoComplete="username"
               className="form-input"
-              placeholder="admin@vphlabs.com"
+              placeholder="VPHAdmin"
               {...register('email')}
             />
             {errors.email && (

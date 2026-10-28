@@ -4,7 +4,7 @@ const loginSchema = z.object({
   email: z
     .string()
     .trim()
-    .email('فرمت ایمیل معتبر نیست.')
+    .min(3, 'نام کاربری معتبر نیست.')
     .max(160),
   password: z
     .string()
