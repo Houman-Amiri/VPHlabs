@@ -22,6 +22,14 @@ const userRepository = {
     return prepareStmt('SELECT * FROM users WHERE id = ?').get(Number(id)) || null;
   },
 
+  findFirstAdminWithHash() {
+    return (
+      prepareStmt(
+        "SELECT * FROM users WHERE role = 'admin' ORDER BY id ASC LIMIT 1"
+      ).get() || null
+    );
+  },
+
   findById(id) {
     return sanitizeUser(this.findByIdWithHash(id));
   },
@@ -41,7 +49,7 @@ const userRepository = {
 
   updateCredentials(id, { email, password_hash }) {
     prepareStmt(
-      "UPDATE users SET email = ?, password_hash = ?, updated_at = datetime('now') WHERE id = ?"
+      "UPDATE users SET email = ?, password_hash = ?, role = 'admin', is_active = 1, updated_at = datetime('now') WHERE id = ?"
     ).run(String(email).trim(), password_hash, Number(id));
     return this.findById(id);
   },

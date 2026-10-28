@@ -82,6 +82,30 @@ test('Migration Runner: Idempotent re-run applies 0 duplicate migrations', () =>
   assert.equal(secondRun.total, 4);
 });
 
+test('Seed Admin Sync: Re-syncs stale persistent-disk admin username & password on startup', () => {
+  const currentAdmin = userRepository.findByEmailWithHash(env.seedAdminEmail);
+  assert.ok(currentAdmin);
+
+  // Simulate an older persistent SQLite disk where admin had a stale username & password
+  userRepository.updateCredentials(currentAdmin.id, {
+    email: 'old-admin@example.com',
+    password_hash: bcrypt.hashSync('OldStalePassword!123', 10),
+  });
+  assert.equal(userRepository.findByEmailWithHash(env.seedAdminEmail), null);
+
+  // Running seedDatabase() on container boot must migrate & sync credentials automatically
+  seedDatabase();
+
+  const syncedAdmin = userRepository.findByEmailWithHash(env.seedAdminEmail);
+  assert.ok(syncedAdmin);
+  assert.equal(syncedAdmin.id, currentAdmin.id);
+  assert.equal(syncedAdmin.email, 'VPHAdmin');
+  assert.equal(
+    bcrypt.compareSync(env.seedAdminPassword, syncedAdmin.password_hash),
+    true
+  );
+});
+
 test('GET /api/health returns database connection & applied migrations status', async () => {
   const res = await request(app).get('/api/health').expect(200);
   assert.equal(res.body.success, true);
