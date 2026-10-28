@@ -21,10 +21,11 @@ COPY server/package*.json ./
 RUN npm ci --omit=dev
 
 # Stage 3: Minimal Production Runtime Image
+# Default PORT=3000 matches Runflare's standard Docker Expose Port preset
 FROM node:22-bookworm-slim AS runtime
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
-    PORT=4000 \
+    PORT=3000 \
     SQLITE_DB_PATH=/app/storage/data/vphlabs.db \
     UPLOADS_DIR=/app/storage/uploads
 
@@ -42,6 +43,6 @@ COPY client/public/banners ./client/public/banners
 # Prepare persistent storage mount point (/app/storage on Runflare Disk)
 RUN mkdir -p /app/storage/data /app/storage/uploads
 
-EXPOSE 4000
+EXPOSE 3000
 
 CMD ["node", "server/src/index.js"]

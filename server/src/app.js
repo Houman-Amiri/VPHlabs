@@ -33,7 +33,7 @@ function isAllowedOrigin(origin, req) {
 
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) return true;
   if (/^https:\/\/[a-z0-9-]+\.e2b\.app$/i.test(origin)) return true;
-  if (/^https?:\/\/([a-z0-9-]+\.)?runflare\.(run|com)$/i.test(origin))
+  if (/^https?:\/\/([a-z0-9-]+\.)?runflare\.(run|com|cloud)$/i.test(origin))
     return true;
   if (/^https?:\/\/([a-z0-9-]+\.)?vphlabs\.com$/i.test(origin)) return true;
   return false;
