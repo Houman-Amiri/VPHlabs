@@ -18,6 +18,9 @@ const env = {
   sqliteDbPath:
     process.env.SQLITE_DB_PATH ||
     path.resolve(__dirname, '../../data/vphlabs.db'),
+  uploadsDir:
+    process.env.UPLOADS_DIR ||
+    path.resolve(__dirname, '../../uploads'),
   jwtSecret:
     process.env.JWT_SECRET ||
     'vphlabs-dev-only-jwt-secret-replace-in-production-env-64chars!!',

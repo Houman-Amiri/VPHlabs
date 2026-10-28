@@ -14,11 +14,27 @@ const { apiRouter } = require('./routes');
 const seoRoutes = require('./routes/seoRoutes');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
-function isAllowedOrigin(origin) {
+function isAllowedOrigin(origin, req) {
   if (!origin) return true; // Same-origin or server-to-server requests
   if (origin === env.clientOrigin || origin === env.siteUrl) return true;
+
+  // Automatically allow same-host origin when Express serves the built SPA directly
+  const reqHost = String(
+    req?.headers?.['x-forwarded-host'] || req?.headers?.host || ''
+  )
+    .split(',')[0]
+    .trim();
+  if (
+    reqHost &&
+    (origin === `https://${reqHost}` || origin === `http://${reqHost}`)
+  ) {
+    return true;
+  }
+
   if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin)) return true;
   if (/^https:\/\/[a-z0-9-]+\.e2b\.app$/i.test(origin)) return true;
+  if (/^https?:\/\/([a-z0-9-]+\.)?runflare\.(run|com)$/i.test(origin))
+    return true;
   if (/^https?:\/\/([a-z0-9-]+\.)?vphlabs\.com$/i.test(origin)) return true;
   return false;
 }
@@ -40,21 +56,22 @@ function createApp() {
 
   // Strict origin-checked CORS with credentials for httpOnly JWT cookies
   app.use(
-    cors({
-      origin(origin, callback) {
-        if (isAllowedOrigin(origin)) {
-          return callback(null, true);
-        }
-        return callback(new Error('Origin not permitted by CORS policy'));
-      },
-      credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: [
-        'Content-Type',
-        'Authorization',
-        'X-VPH-Auth',
-        'X-Requested-With',
-      ],
+    cors((req, callback) => {
+      const origin = req.header('Origin');
+      if (isAllowedOrigin(origin, req)) {
+        return callback(null, {
+          origin: true,
+          credentials: true,
+          methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+          allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-VPH-Auth',
+            'X-Requested-With',
+          ],
+        });
+      }
+      return callback(new Error('Origin not permitted by CORS policy'));
     })
   );
 

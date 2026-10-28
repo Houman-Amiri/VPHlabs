@@ -6,7 +6,7 @@ const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const env = require('../config/env');
 const { AppError } = require('./errorHandler');
 
-const UPLOADS_DIR = path.resolve(__dirname, '../../uploads');
+const UPLOADS_DIR = env.uploadsDir;
 fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
 const ALLOWED_MIME_EXT = {
