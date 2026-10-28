@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Lock } from 'lucide-react';
+import { Eye, EyeOff, Lock } from 'lucide-react';
 import {
   adminLoginFormSchema,
   type AdminLoginFormValues,
@@ -11,6 +11,14 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { useToastStore } from '../../store/useToastStore';
 import { SeoHead } from '../../components/common/SeoHead';
 
+function sanitizeCredentialInput(val: string) {
+  return String(val ?? '')
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060\u2066-\u2069\uFEFF]/g, '')
+    .replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+    .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+    .trim();
+}
+
 export function AdminLoginPage() {
   const user = useAuthStore((s) => s.user);
   const login = useAuthStore((s) => s.login);
@@ -18,6 +26,7 @@ export function AdminLoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -38,7 +47,9 @@ export function AdminLoginPage() {
   async function onSubmit(values: AdminLoginFormValues) {
     setServerError(null);
     try {
-      await login(values.email, values.password);
+      const cleanedEmail = sanitizeCredentialInput(values.email);
+      const cleanedPassword = sanitizeCredentialInput(values.password);
+      await login(cleanedEmail, cleanedPassword);
       addToast('خوش آمدید! ورود با موفقیت انجام شد.', 'success');
       const target =
         (location.state as { from?: string } | null)?.from || '/admin';
@@ -88,7 +99,8 @@ export function AdminLoginPage() {
               marginBottom: '1rem',
               borderRadius: '0.6rem',
               background: 'rgba(248, 113, 113, 0.12)',
-              border: '1px solid rgba(248, 113, 113, 0.35)',
+              border: '1px solid var(--border-strong)',
+              borderColor: 'rgba(248, 113, 113, 0.35)',
               color: 'var(--accent-danger)',
               fontSize: '0.86rem',
             }}
@@ -107,6 +119,9 @@ export function AdminLoginPage() {
               type="text"
               dir="ltr"
               autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
               className="form-input"
               placeholder="VPHAdmin"
               {...register('email')}
@@ -120,15 +135,42 @@ export function AdminLoginPage() {
             <label htmlFor="admin-password" className="form-label">
               رمز عبور
             </label>
-            <input
-              id="admin-password"
-              type="password"
-              dir="ltr"
-              autoComplete="current-password"
-              className="form-input"
-              placeholder="••••••••••••"
-              {...register('password')}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                id="admin-password"
+                type={showPassword ? 'text' : 'password'}
+                dir="ltr"
+                autoComplete="current-password"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                className="form-input"
+                style={{ paddingRight: '2.85rem', textAlign: 'left' }}
+                placeholder="••••••••••••"
+                {...register('password')}
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? 'پنهان کردن رمز عبور' : 'نمایش رمز عبور'}
+                onClick={() => setShowPassword((prev) => !prev)}
+                style={{
+                  position: 'absolute',
+                  right: '0.55rem',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  padding: '0.35rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
             {errors.password && (
               <span className="form-error">{errors.password.message}</span>
             )}

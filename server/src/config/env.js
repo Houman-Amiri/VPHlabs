@@ -1,5 +1,9 @@
 const path = require('path');
 const dotenv = require('dotenv');
+const {
+  cleanEnvCredential,
+  stripInvisibleMarks,
+} = require('../utils/credentialNormalizer');
 
 // Load .env from repo root or server root if present
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
@@ -7,8 +11,19 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
-const rawSeedEmail = (process.env.SEED_ADMIN_EMAIL || '').trim();
-const rawSeedPassword = (process.env.SEED_ADMIN_PASSWORD || '').trim();
+const rawSeedEmail = cleanEnvCredential(
+  process.env.SEED_ADMIN_EMAIL,
+  'SEED_ADMIN_EMAIL'
+);
+const rawSeedPassword = cleanEnvCredential(
+  process.env.SEED_ADMIN_PASSWORD,
+  'SEED_ADMIN_PASSWORD'
+);
+
+const PLACEHOLDER_PASSWORDS = new Set([
+  'replace-with-strong-admin-password',
+  'changeme',
+]);
 
 const env = {
   nodeEnv,
@@ -30,12 +45,16 @@ const env = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '12h',
   cookieSecure:
     process.env.COOKIE_SECURE === 'true' || nodeEnv === 'production',
-  seedAdminEmail: rawSeedEmail || 'VPHAdmin',
+  seedAdminEmail:
+    rawSeedEmail && rawSeedEmail.toLowerCase() !== 'admin@vphlabs.com'
+      ? rawSeedEmail
+      : 'VPHAdmin',
   seedAdminPassword:
-    rawSeedPassword && rawSeedPassword !== 'replace-with-strong-admin-password'
+    rawSeedPassword && !PLACEHOLDER_PASSWORDS.has(rawSeedPassword.toLowerCase())
       ? rawSeedPassword
       : 'ShA540210.321',
-  seedAdminName: (process.env.SEED_ADMIN_NAME || '').trim() || 'شهرام امیری',
+  seedAdminName:
+    stripInvisibleMarks(process.env.SEED_ADMIN_NAME) || 'شهرام امیری',
   storageDriver: process.env.STORAGE_DRIVER || 'local',
   maxUploadSizeMb: parseInt(process.env.MAX_UPLOAD_SIZE_MB || '5', 10),
   s3: {

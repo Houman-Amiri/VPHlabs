@@ -16,6 +16,10 @@ process.env.SQLITE_DB_PATH = tmpDbPath;
 process.env.NODE_ENV = 'test';
 
 const env = require('../src/config/env');
+const {
+  cleanEnvCredential,
+  buildPasswordCandidates,
+} = require('../src/utils/credentialNormalizer');
 const { closeDb } = require('../src/connection/db');
 const { runMigrations } = require('../src/migrations/runner');
 const { seedDatabase } = require('../src/seeds/seed');
@@ -104,6 +108,22 @@ test('Seed Admin Sync: Re-syncs stale persistent-disk admin username & password 
     bcrypt.compareSync(env.seedAdminPassword, syncedAdmin.password_hash),
     true
   );
+
+  // Verify RTL copy-paste BiDi marks, KEY= prefixes, quotes & Persian digits normalize cleanly
+  assert.equal(
+    cleanEnvCredential('\u200fSEED_ADMIN_EMAIL="VPHAdmin"\u200e', 'SEED_ADMIN_EMAIL'),
+    'VPHAdmin'
+  );
+  assert.equal(
+    cleanEnvCredential('\u200f"ShA۵۴۰۲۱۰.۳۲۱"\u200f', 'SEED_ADMIN_PASSWORD'),
+    'ShA540210.321'
+  );
+  assert.ok(
+    userRepository.findByEmailWithHash('\u200fVPHAdmin\u200e') !== null
+  );
+  assert.ok(
+    buildPasswordCandidates('\u200fShA۵۴۰۲۱۰.۳۲۱\u200e').includes('ShA540210.321')
+  );
 });
 
 test('GET /api/health returns database connection & applied migrations status', async () => {
@@ -112,6 +132,8 @@ test('GET /api/health returns database connection & applied migrations status', 
   assert.equal(res.body.data.status, 'ok');
   assert.equal(res.body.data.database, 'connected');
   assert.equal(res.body.data.migrationsCount, 4);
+  assert.equal(res.body.data.adminReady, true);
+  assert.equal(res.body.data.build, '2026.10.28-r6');
 });
 
 test('GET /api/content/bootstrap returns charter services, charter banners, team members & updated contact info', async () => {
