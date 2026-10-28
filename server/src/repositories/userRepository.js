@@ -1,4 +1,5 @@
 const { prepareStmt } = require('./_stmtCache');
+const { normalizeLoginUsername } = require('../utils/credentialNormalizer');
 
 function sanitizeUser(row) {
   if (!row) return null;
@@ -11,11 +12,23 @@ function sanitizeUser(row) {
 
 const userRepository = {
   findByEmailWithHash(email) {
-    return (
+    const normalized = normalizeLoginUsername(email);
+    const direct =
       prepareStmt('SELECT * FROM users WHERE LOWER(email) = LOWER(?)').get(
-        String(email).trim()
-      ) || null
-    );
+        normalized
+      ) || null;
+    if (direct) return direct;
+
+    // Fallback if mobile keyboard inserted spaces inside username (e.g. "VPH Admin")
+    const compact = normalized.replace(/\s+/g, '');
+    if (compact && compact !== normalized) {
+      return (
+        prepareStmt('SELECT * FROM users WHERE LOWER(email) = LOWER(?)').get(
+          compact
+        ) || null
+      );
+    }
+    return null;
   },
 
   findByIdWithHash(id) {

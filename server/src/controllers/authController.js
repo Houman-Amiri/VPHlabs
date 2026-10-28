@@ -4,6 +4,7 @@ const env = require('../config/env');
 const userRepository = require('../repositories/userRepository');
 const { AppError, asyncHandler } = require('../middlewares/errorHandler');
 const { AUTH_COOKIE_NAME } = require('../middlewares/auth');
+const { buildPasswordCandidates } = require('../utils/credentialNormalizer');
 
 function buildCookieOptions(req) {
   const origin = String(req?.headers?.origin || '');
@@ -56,12 +57,15 @@ const authController = {
       );
     }
 
-    const rawPassword = String(password);
-    const trimmedPassword = rawPassword.trim();
-    const valid =
-      (await bcrypt.compare(rawPassword, userRecord.password_hash)) ||
-      (trimmedPassword !== rawPassword &&
-        (await bcrypt.compare(trimmedPassword, userRecord.password_hash)));
+    const candidates = buildPasswordCandidates(password);
+    let valid = false;
+    for (const candidate of candidates) {
+      // eslint-disable-next-line no-await-in-loop
+      if (await bcrypt.compare(candidate, userRecord.password_hash)) {
+        valid = true;
+        break;
+      }
+    }
 
     if (!valid) {
       throw new AppError(

@@ -8,6 +8,7 @@ import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { AboutPage } from '../pages/AboutPage';
 import { AdminLayout } from '../pages/admin/AdminLayout';
+import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
 import { RequireRole } from '../components/auth/RouteGuards';
 import { useThemeStore } from '../store/useThemeStore';
 import { useAuthStore } from '../store/useAuthStore';
@@ -310,5 +311,30 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
 
     fireEvent.click(mobileToggle);
     expect(sidebar.classList.contains('is-open')).toBe(false);
+  });
+
+  it('AdminLoginPage toggles password visibility eye button for mobile verification', () => {
+    useAuthStore.setState({
+      user: null,
+      isInitialized: true,
+      isLoading: false,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/admin/login']}>
+        <AdminLoginPage />
+      </MemoryRouter>
+    );
+
+    const pwInput = document.getElementById('admin-password') as HTMLInputElement;
+    expect(pwInput.type).toBe('password');
+
+    const showBtn = screen.getByRole('button', { name: 'نمایش رمز عبور' });
+    fireEvent.click(showBtn);
+    expect(pwInput.type).toBe('text');
+
+    const hideBtn = screen.getByRole('button', { name: 'پنهان کردن رمز عبور' });
+    fireEvent.click(hideBtn);
+    expect(pwInput.type).toBe('password');
   });
 });
