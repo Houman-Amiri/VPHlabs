@@ -7,6 +7,9 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 
+const rawSeedEmail = (process.env.SEED_ADMIN_EMAIL || '').trim();
+const rawSeedPassword = (process.env.SEED_ADMIN_PASSWORD || '').trim();
+
 const env = {
   nodeEnv,
   isProd: nodeEnv === 'production',
@@ -27,9 +30,12 @@ const env = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '12h',
   cookieSecure:
     process.env.COOKIE_SECURE === 'true' || nodeEnv === 'production',
-  seedAdminEmail: process.env.SEED_ADMIN_EMAIL || 'VPHAdmin',
-  seedAdminPassword: process.env.SEED_ADMIN_PASSWORD || 'ShA540210.321',
-  seedAdminName: process.env.SEED_ADMIN_NAME || 'شهرام امیری',
+  seedAdminEmail: rawSeedEmail || 'VPHAdmin',
+  seedAdminPassword:
+    rawSeedPassword && rawSeedPassword !== 'replace-with-strong-admin-password'
+      ? rawSeedPassword
+      : 'ShA540210.321',
+  seedAdminName: (process.env.SEED_ADMIN_NAME || '').trim() || 'شهرام امیری',
   storageDriver: process.env.STORAGE_DRIVER || 'local',
   maxUploadSizeMb: parseInt(process.env.MAX_UPLOAD_SIZE_MB || '5', 10),
   s3: {

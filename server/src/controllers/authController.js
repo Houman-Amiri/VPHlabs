@@ -50,16 +50,22 @@ const authController = {
 
     if (!userRecord || !userRecord.is_active) {
       throw new AppError(
-        'ایمیل یا رمز عبور اشتباه است.',
+        'نام کاربری یا رمز عبور اشتباه است.',
         401,
         'INVALID_CREDENTIALS'
       );
     }
 
-    const valid = await bcrypt.compare(password, userRecord.password_hash);
+    const rawPassword = String(password);
+    const trimmedPassword = rawPassword.trim();
+    const valid =
+      (await bcrypt.compare(rawPassword, userRecord.password_hash)) ||
+      (trimmedPassword !== rawPassword &&
+        (await bcrypt.compare(trimmedPassword, userRecord.password_hash)));
+
     if (!valid) {
       throw new AppError(
-        'ایمیل یا رمز عبور اشتباه است.',
+        'نام کاربری یا رمز عبور اشتباه است.',
         401,
         'INVALID_CREDENTIALS'
       );

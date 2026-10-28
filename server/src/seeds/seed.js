@@ -1070,29 +1070,52 @@ function seedDatabase() {
   runMigrations();
 
   let seededAdmin = false;
-  if (userRepository.countAll() === 0) {
-    const hash = bcrypt.hashSync(env.seedAdminPassword, 12);
-    userRepository.create({
-      name: env.seedAdminName,
-      email: env.seedAdminEmail,
-      password_hash: hash,
-      role: 'admin',
-    });
-    seededAdmin = true;
-    logger.info({ email: env.seedAdminEmail }, 'Seeded initial admin user');
-  } else {
-    const legacyAdmin = userRepository.findByEmailWithHash('admin@vphlabs.com');
-    const targetAdmin = userRepository.findByEmailWithHash(env.seedAdminEmail);
-    if (legacyAdmin && !targetAdmin) {
+  const targetAdmin = userRepository.findByEmailWithHash(env.seedAdminEmail);
+
+  if (targetAdmin) {
+    const passwordMatches = bcrypt.compareSync(
+      env.seedAdminPassword,
+      targetAdmin.password_hash
+    );
+    const needsRoleOrActiveFix =
+      targetAdmin.role !== 'admin' || !targetAdmin.is_active;
+
+    if (!passwordMatches || needsRoleOrActiveFix) {
       const hash = bcrypt.hashSync(env.seedAdminPassword, 12);
-      userRepository.updateCredentials(legacyAdmin.id, {
+      userRepository.updateCredentials(targetAdmin.id, {
         email: env.seedAdminEmail,
         password_hash: hash,
       });
       logger.info(
         { email: env.seedAdminEmail },
-        'Migrated legacy default admin credentials'
+        'Synchronized admin password & active role with configured environment credentials'
       );
+    }
+  } else {
+    const existingAdmin =
+      userRepository.findByEmailWithHash('admin@vphlabs.com') ||
+      userRepository.findFirstAdminWithHash();
+
+    if (existingAdmin) {
+      const hash = bcrypt.hashSync(env.seedAdminPassword, 12);
+      userRepository.updateCredentials(existingAdmin.id, {
+        email: env.seedAdminEmail,
+        password_hash: hash,
+      });
+      logger.info(
+        { previousEmail: existingAdmin.email, email: env.seedAdminEmail },
+        'Migrated existing admin account to configured environment credentials'
+      );
+    } else {
+      const hash = bcrypt.hashSync(env.seedAdminPassword, 12);
+      userRepository.create({
+        name: env.seedAdminName,
+        email: env.seedAdminEmail,
+        password_hash: hash,
+        role: 'admin',
+      });
+      seededAdmin = true;
+      logger.info({ email: env.seedAdminEmail }, 'Seeded initial admin user');
     }
   }
 
