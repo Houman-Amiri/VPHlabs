@@ -4,18 +4,23 @@
 # =============================================================================
 
 # Stage 1: Build React + Vite + TypeScript SPA
+# Note: Runflare injects service ENV vars (including NODE_ENV=production) at
+# build time; force --include=dev so TypeScript, Vite & type defs are installed.
 FROM node:22-bookworm-slim AS client-builder
 WORKDIR /app/client
 COPY client/package*.json ./
-RUN npm ci
+RUN NPM_CONFIG_PRODUCTION=false NPM_CONFIG_OMIT="" NODE_ENV=development npm ci --include=dev
 COPY client/ ./
-RUN npm run build
+RUN NODE_ENV=production npm run build
 
 # Stage 2: Compile Backend Dependencies (including native better-sqlite3)
+# npm_config_nodedir=/usr/local allows offline node-gyp fallback using built-in
+# Node C++ headers if GitHub release downloads are throttled inside Iran.
 FROM node:22-bookworm-slim AS server-builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 make g++ \
+    ca-certificates python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
+ENV npm_config_nodedir=/usr/local
 WORKDIR /app/server
 COPY server/package*.json ./
 RUN npm ci --omit=dev
@@ -24,6 +29,7 @@ RUN npm ci --omit=dev
 # Default PORT=3000 matches Runflare's standard Docker Expose Port preset
 FROM node:22-bookworm-slim AS runtime
 RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+  && apt-get install -y --no-install-recommends ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
@@ -33,7 +39,7 @@ ENV NODE_ENV=production \
 
 WORKDIR /app
 
-# Copy compiled server dependencies & source
+# Copy compiled server dependencies & source (including SQL migrations & seeds)
 COPY --from=server-builder /app/server/node_modules ./server/node_modules
 COPY server/package.json ./server/package.json
 COPY server/src ./server/src
