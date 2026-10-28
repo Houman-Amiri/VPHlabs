@@ -112,15 +112,7 @@ export function Footer() {
             <h3 style={{ margin: '0 0 0.85rem', fontSize: '0.95rem' }}>
               {quickLinksTitle}
             </h3>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.45rem',
-                fontSize: '0.9rem',
-                color: 'var(--text-secondary)',
-              }}
-            >
+            <div className="footer-links-list">
               <Link to="/">{t('nav.home')}</Link>
               <Link to="/products">{t('nav.products')}</Link>
               <Link to="/services">{t('nav.services')}</Link>
@@ -134,15 +126,7 @@ export function Footer() {
             <h3 style={{ margin: '0 0 0.85rem', fontSize: '0.95rem' }}>
               {solutionsTitle}
             </h3>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.45rem',
-                fontSize: '0.9rem',
-                color: 'var(--text-secondary)',
-              }}
-            >
+            <div className="footer-links-list">
               <Link to="/products/vira-docmind-ai">
                 {isFa ? 'ویرا داک‌مایند (RAG فارسی)' : 'VIRA DocMind AI'}
               </Link>

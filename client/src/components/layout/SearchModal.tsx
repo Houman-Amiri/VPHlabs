@@ -69,44 +69,35 @@ export function SearchModal({
       aria-modal="true"
       aria-label="جستجو در سایت"
       onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 900,
-        background: 'rgba(7, 9, 14, 0.72)',
-        backdropFilter: 'blur(6px)',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        padding: '5rem 1rem 2rem',
-      }}
+      className="search-modal-backdrop"
     >
       <div
-        className="card"
+        className="card search-modal-card"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%',
-          maxWidth: '640px',
-          maxHeight: '78vh',
-          overflowY: 'auto',
-          padding: '1.25rem',
-        }}
       >
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.65rem',
+            gap: '0.55rem',
             borderBottom: '1px solid var(--border-subtle)',
             paddingBottom: '0.85rem',
           }}
         >
-          <Search size={19} style={{ color: 'var(--accent-primary)' }} />
+          <Search
+            size={19}
+            style={{ color: 'var(--accent-primary)', flexShrink: 0 }}
+          />
           <input
             autoFocus
             type="search"
             className="form-input"
-            style={{ border: 'none', background: 'transparent', padding: '0.3rem' }}
+            style={{
+              border: 'none',
+              background: 'transparent',
+              padding: '0.3rem',
+              minWidth: 0,
+            }}
             placeholder={t('nav.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -115,6 +106,7 @@ export function SearchModal({
             type="button"
             className="icon-btn"
             aria-label="بستن جستجو"
+            style={{ flexShrink: 0 }}
             onClick={onClose}
           >
             <X size={16} />
@@ -159,15 +151,16 @@ export function SearchModal({
                       onClick={onClose}
                       style={{
                         display: 'flex',
-                        alignItems: 'center',
+                        alignItems: 'flex-start',
                         gap: '0.65rem',
                         padding: '0.6rem 0.7rem',
                         borderRadius: '0.55rem',
+                        whiteSpace: 'normal',
                       }}
                       className="nav-item"
                     >
-                      <Package size={16} />
-                      <div>
+                      <Package size={16} style={{ flexShrink: 0, marginTop: '0.2rem' }} />
+                      <div style={{ minWidth: 0 }}>
                         <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                           {isFa ? prod.title_fa : prod.title_en || prod.title_fa}
                         </div>
@@ -203,15 +196,16 @@ export function SearchModal({
                       onClick={onClose}
                       style={{
                         display: 'flex',
-                        alignItems: 'center',
+                        alignItems: 'flex-start',
                         gap: '0.65rem',
                         padding: '0.6rem 0.7rem',
                         borderRadius: '0.55rem',
+                        whiteSpace: 'normal',
                       }}
                       className="nav-item"
                     >
-                      <FileText size={16} />
-                      <div>
+                      <FileText size={16} style={{ flexShrink: 0, marginTop: '0.2rem' }} />
+                      <div style={{ minWidth: 0 }}>
                         <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                           {isFa ? art.title_fa : art.title_en || art.title_fa}
                         </div>

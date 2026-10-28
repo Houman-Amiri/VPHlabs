@@ -60,32 +60,27 @@ export function AdminMessagesPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: '1.35rem' }}>
-          پیام‌های دریافتی و درخواست‌های دمو سازمانی
-        </h1>
+      <div className="admin-page-header">
+        <div>
+          <h1 style={{ margin: 0, fontSize: 'clamp(1.18rem, 2.4vw, 1.35rem)' }}>
+            پیام‌های دریافتی و درخواست‌های دمو سازمانی
+          </h1>
+        </div>
 
-        <select
-          className="form-select"
-          style={{ width: 'auto' }}
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="">همه پیام‌ها</option>
-          <option value="unread">خوانده‌نشده</option>
-          <option value="read">بررسی‌شده</option>
-          <option value="responded">پاسخ‌داده‌شده</option>
-          <option value="archived">بایگانی‌شده</option>
-        </select>
+        <div className="toolbar-filters">
+          <select
+            className="form-select"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            aria-label="فیلتر وضعیت پیام‌ها"
+          >
+            <option value="">همه پیام‌ها</option>
+            <option value="unread">خوانده‌نشده</option>
+            <option value="read">بررسی‌شده</option>
+            <option value="responded">پاسخ‌داده‌شده</option>
+            <option value="archived">بایگانی‌شده</option>
+          </select>
+        </div>
       </div>
 
       {loading ? (
@@ -106,22 +101,19 @@ export function AdminMessagesPage() {
                   marginBottom: '0.75rem',
                 }}
               >
-                <div>
-                  <strong style={{ fontSize: '1.05rem' }}>{msg.subject}</strong>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem' }}>
+                  <strong style={{ fontSize: '1.03rem' }}>{msg.subject}</strong>
                   {msg.product_title_fa && (
-                    <span
-                      className="badge"
-                      style={{ marginInlineStart: '0.6rem' }}
-                    >
+                    <span className="badge">
                       محصول: {msg.product_title_fa}
                     </span>
                   )}
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem' }}>
                   <select
                     className="form-select"
-                    style={{ width: 'auto', padding: '0.35rem 0.65rem', fontSize: '0.84rem' }}
+                    style={{ width: 'auto', minWidth: '140px', padding: '0.35rem 0.65rem', fontSize: '0.84rem' }}
                     value={msg.status}
                     onChange={(e) =>
                       handleStatusChange(
@@ -151,16 +143,19 @@ export function AdminMessagesPage() {
                 style={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  gap: '1.25rem',
+                  gap: '0.65rem 1.15rem',
                   fontSize: '0.85rem',
                   color: 'var(--text-secondary)',
                   marginBottom: '0.85rem',
+                  wordBreak: 'break-word',
                 }}
               >
                 <span>فرستنده: {msg.full_name}</span>
                 {msg.organization && <span>سازمان: {msg.organization}</span>}
                 <span dir="ltr">{msg.phone}</span>
-                <span className="mono">{msg.email}</span>
+                <span className="mono" style={{ wordBreak: 'break-all' }}>
+                  {msg.email}
+                </span>
                 <span>{formatLocaleDate(msg.created_at, 'fa')}</span>
               </div>
 

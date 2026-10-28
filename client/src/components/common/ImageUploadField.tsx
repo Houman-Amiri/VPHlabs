@@ -51,14 +51,14 @@ export function ImageUploadField({
         <input
           type="text"
           className="form-input mono"
-          style={{ flex: '1 1 240px' }}
+          style={{ flex: '1 1 220px' }}
           placeholder="/banners/banner-1.jpg یا /uploads/..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
         <label
           className="btn btn-secondary"
-          style={{ cursor: uploading ? 'wait' : 'pointer' }}
+          style={{ cursor: uploading ? 'wait' : 'pointer', flex: '0 0 auto' }}
         >
           <Upload size={16} />
           <span>{uploading ? 'در حال آپلود...' : 'آپلود تصویر'}</span>
@@ -78,6 +78,7 @@ export function ImageUploadField({
           style={{
             marginTop: '0.6rem',
             maxHeight: '110px',
+            maxWidth: '100%',
             borderRadius: '0.5rem',
             border: '1px solid var(--border-subtle)',
             objectFit: 'cover',

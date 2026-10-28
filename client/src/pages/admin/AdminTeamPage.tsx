@@ -148,18 +148,9 @@ export function AdminTeamPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
-      >
+      <div className="admin-page-header">
         <div>
-          <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.35rem' }}>
+          <h1 style={{ margin: '0 0 0.25rem', fontSize: 'clamp(1.18rem, 2.4vw, 1.35rem)' }}>
             مدیریت معرفی همکاران (صفحه درباره ما)
           </h1>
           <p
@@ -340,7 +331,7 @@ export function AdminTeamPage() {
               </label>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
+            <div className="form-actions" style={{ marginTop: '0.75rem' }}>
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -376,19 +367,14 @@ export function AdminTeamPage() {
                 <div
                   style={{
                     display: 'flex',
+                    flexWrap: 'wrap',
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
                     gap: '0.75rem',
                     marginBottom: '0.85rem',
                   }}
                 >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.85rem',
-                    }}
-                  >
+                  <div className="team-member-head" style={{ flex: '1 1 190px' }}>
                     {m.avatar_url ? (
                       <img
                         src={m.avatar_url}
@@ -400,8 +386,8 @@ export function AdminTeamPage() {
                         {(m.full_name_fa || 'V').trim().charAt(0)}
                       </div>
                     )}
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: '1.05rem' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: '1.03rem' }}>
                         {m.full_name_fa}
                       </div>
                       <div

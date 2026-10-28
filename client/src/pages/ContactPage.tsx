@@ -137,7 +137,7 @@ export function ContactPage() {
   }
 
   return (
-    <div className="container" style={{ paddingBottom: '4rem' }}>
+    <div className="container page-bottom-space">
       <SeoHead
         title={pageTitle}
         description={pageSubtitle}
@@ -149,7 +149,7 @@ export function ContactPage() {
         <p className="page-subtitle">{pageSubtitle}</p>
       </header>
 
-      <div className="grid-2" style={{ alignItems: 'start', gap: '2rem' }}>
+      <div className="grid-2 detail-grid" style={{ alignItems: 'start' }}>
         {/* RHF + Zod Validated Contact Form */}
         <section className="card">
           <h2

@@ -139,11 +139,10 @@ export function HomePage() {
       <BannerCarousel banners={banners} />
 
       {/* 2. Dynamic Company Mission & Live Stats */}
-      <section className="container page-section" style={{ paddingBottom: '2.5rem' }}>
+      <section className="container page-section" style={{ paddingBottom: '2.25rem' }}>
         <div
-          className="card"
+          className="card hero-card"
           style={{
-            padding: '2.25rem',
             background:
               'linear-gradient(145deg, var(--bg-surface) 0%, var(--bg-elevated) 100%)',
           }}
@@ -156,9 +155,9 @@ export function HomePage() {
           <h1
             style={{
               margin: '0 0 1rem',
-              fontSize: 'clamp(1.7rem, 3.4vw, 2.65rem)',
+              fontSize: 'clamp(1.5rem, 3.4vw, 2.65rem)',
               fontWeight: 800,
-              lineHeight: 1.35,
+              lineHeight: 1.38,
             }}
           >
             {missionTitle}
@@ -166,16 +165,16 @@ export function HomePage() {
 
           <p
             style={{
-              margin: '0 0 1.75rem',
+              margin: '0 0 1.65rem',
               color: 'var(--text-secondary)',
-              fontSize: '1.05rem',
+              fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
               maxWidth: '880px',
             }}
           >
             {missionSubtitle}
           </p>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.85rem' }}>
+          <div className="hero-actions">
             <Link to="/products" className="btn btn-primary">
               <span>{ctaPrimary}</span>
               {isFa ? <ArrowLeft size={17} /> : <ArrowRight size={17} />}
@@ -245,19 +244,10 @@ export function HomePage() {
       ) : (
         <>
           {/* 4. Featured AI Products */}
-          <section className="container" style={{ marginBottom: '4rem' }}>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-                gap: '1rem',
-                marginBottom: '1.75rem',
-              }}
-            >
+          <section className="container" style={{ marginBottom: '3.5rem' }}>
+            <div className="section-head">
               <div>
-                <h2 style={{ margin: '0 0 0.35rem', fontSize: '1.55rem' }}>
+                <h2 style={{ margin: '0 0 0.35rem', fontSize: 'clamp(1.28rem, 2.5vw, 1.55rem)' }}>
                   {featuredTitle}
                 </h2>
                 <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
@@ -348,19 +338,10 @@ export function HomePage() {
           </section>
 
           {/* 5. Recent SEO Articles & Essays with Details */}
-          <section className="container" style={{ marginBottom: '4rem' }}>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-                gap: '1rem',
-                marginBottom: '1.75rem',
-              }}
-            >
+          <section className="container" style={{ marginBottom: '3.5rem' }}>
+            <div className="section-head">
               <div>
-                <h2 style={{ margin: '0 0 0.35rem', fontSize: '1.55rem' }}>
+                <h2 style={{ margin: '0 0 0.35rem', fontSize: 'clamp(1.28rem, 2.5vw, 1.55rem)' }}>
                   {articlesTitle}
                 </h2>
                 <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
@@ -499,19 +480,10 @@ export function HomePage() {
           {/* 6. Official Charter Capabilities Highlight */}
           {services.length > 0 && (
             <section className="container" style={{ marginBottom: '2rem' }}>
-              <div className="card" style={{ padding: '2rem' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '1rem',
-                    marginBottom: '1.5rem',
-                  }}
-                >
+              <div className="card section-card">
+                <div className="section-head" style={{ marginBottom: '1.5rem' }}>
                   <div>
-                    <h2 style={{ margin: '0 0 0.3rem', fontSize: '1.35rem' }}>
+                    <h2 style={{ margin: '0 0 0.3rem', fontSize: 'clamp(1.18rem, 2.3vw, 1.35rem)' }}>
                       {charterTitle}
                     </h2>
                     <p

@@ -124,18 +124,9 @@ export function AdminContentPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
-      >
+      <div className="admin-page-header">
         <div>
-          <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.35rem' }}>
+          <h1 style={{ margin: '0 0 0.25rem', fontSize: 'clamp(1.18rem, 2.4vw, 1.35rem)' }}>
             مدیریت کامل متون تمامی صفحات (H1، توضیحات و خدمات اساسنامه)
           </h1>
           <p
@@ -149,7 +140,7 @@ export function AdminContentPage() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="cta-actions">
           <button
             type="button"
             className={`btn ${activeTab === 'texts' ? 'btn-primary' : 'btn-secondary'}`}
@@ -179,7 +170,7 @@ export function AdminContentPage() {
               borderBottom: '1px solid var(--border-subtle)',
             }}
           >
-            <div style={{ display: 'flex', gap: '0.45rem', flexWrap: 'wrap' }}>
+            <div className="scroll-pills">
               {PAGE_SECTIONS.map((sec) => (
                 <button
                   key={sec.key}
@@ -207,8 +198,7 @@ export function AdminContentPage() {
               <div
                 style={{
                   position: 'relative',
-                  flex: '1 1 260px',
-                  maxWidth: '420px',
+                  flex: '1 1 240px',
                 }}
               >
                 <Search
@@ -355,8 +345,10 @@ export function AdminContentPage() {
               <div
                 style={{
                   display: 'flex',
+                  flexWrap: 'wrap',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  gap: '0.6rem',
                   marginBottom: '0.85rem',
                 }}
               >

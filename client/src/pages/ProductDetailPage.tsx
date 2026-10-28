@@ -80,7 +80,7 @@ export function ProductDetailPage() {
   };
 
   return (
-    <div className="container" style={{ paddingBlock: '2.5rem 4rem' }}>
+    <div className="container page-bottom-space" style={{ paddingTop: '2rem' }}>
       <SeoHead
         title={title}
         description={summary}
@@ -89,15 +89,15 @@ export function ProductDetailPage() {
         jsonLd={productJsonLd}
       />
 
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '1.25rem' }}>
         <Link to="/products" className="btn btn-ghost">
           <ArrowRight size={16} style={{ transform: isFa ? 'none' : 'rotate(180deg)' }} />
           <span>{t('common.backToList')}</span>
         </Link>
       </div>
 
-      <div className="card" style={{ padding: '2.25rem' }}>
-        <div className="grid-2" style={{ alignItems: 'start', gap: '2.25rem' }}>
+      <div className="card hero-card">
+        <div className="grid-2 detail-grid" style={{ alignItems: 'start' }}>
           <div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '1rem' }}>
               {product.badge && <span className="badge">{product.badge}</span>}
@@ -107,13 +107,13 @@ export function ProductDetailPage() {
               </span>
             </div>
 
-            <h1 style={{ margin: '0 0 1rem', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)' }}>
+            <h1 style={{ margin: '0 0 1rem', fontSize: 'clamp(1.45rem, 3vw, 2.2rem)', lineHeight: 1.38 }}>
               {title}
             </h1>
 
             <p
               style={{
-                fontSize: '1.05rem',
+                fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
                 color: 'var(--text-secondary)',
                 margin: '0 0 1.5rem',
               }}
@@ -121,7 +121,7 @@ export function ProductDetailPage() {
               {summary}
             </p>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div className="cta-actions">
               <Link
                 to={`/contact?product_id=${product.id}&subject=${encodeURIComponent(
                   `درخواست دمو و جلسه فنی: ${product.title_fa}`
@@ -158,11 +158,11 @@ export function ProductDetailPage() {
           style={{
             border: 'none',
             borderTop: '1px solid var(--border-subtle)',
-            marginBlock: '2.25rem',
+            marginBlock: '2rem',
           }}
         />
 
-        <div className="grid-2" style={{ gap: '2.25rem' }}>
+        <div className="grid-2 detail-grid">
           <div>
             <h2 style={{ marginTop: 0, fontSize: '1.28rem' }}>
               {isFa ? 'معرفی و معماری راهکار' : 'Solution Overview & Architecture'}

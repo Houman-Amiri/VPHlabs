@@ -54,10 +54,7 @@ export function AdminLoginPage() {
     <div className="container page-section">
       <SeoHead title="ورود به پنل مدیریت | ویرا پردازش هومان" />
 
-      <div
-        className="card"
-        style={{ maxWidth: '440px', marginInline: 'auto', padding: '2.25rem' }}
-      >
+      <div className="card auth-card">
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
           <div
             style={{

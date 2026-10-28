@@ -82,7 +82,7 @@ export function ArticlesPage() {
   );
 
   return (
-    <div className="container" style={{ paddingBottom: '4rem' }}>
+    <div className="container page-bottom-space">
       <SeoHead
         title={pageTitle}
         description={pageSubtitle}
@@ -100,7 +100,7 @@ export function ArticlesPage() {
             e.preventDefault();
             updateParam('q', searchInput.trim());
           }}
-          style={{ display: 'flex', gap: '0.5rem', flex: '1 1 280px' }}
+          className="toolbar-search"
         >
           <input
             type="search"
@@ -109,12 +109,17 @@ export function ArticlesPage() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button type="submit" className="btn btn-secondary" aria-label="جستجوی مقاله">
+          <button
+            type="submit"
+            className="btn btn-secondary"
+            style={{ flexShrink: 0 }}
+            aria-label="جستجوی مقاله"
+          >
             <Search size={17} />
           </button>
         </form>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+        <div className="scroll-pills">
           <button
             type="button"
             className={`btn ${!category ? 'btn-primary' : 'btn-secondary'}`}
@@ -248,16 +253,18 @@ export function ArticlesPage() {
 
                 <div
                   style={{
-                    padding: '0.85rem 1.35rem',
+                    padding: '0.85rem 1.25rem',
                     borderTop: '1px solid var(--border-subtle)',
                     display: 'flex',
+                    flexWrap: 'wrap',
                     alignItems: 'center',
                     justifyContent: 'space-between',
+                    gap: '0.5rem',
                     fontSize: '0.8rem',
                     color: 'var(--text-muted)',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.7rem' }}>
                     <time dateTime={article.published_at}>
                       {formatLocaleDate(article.published_at, lang)}
                     </time>

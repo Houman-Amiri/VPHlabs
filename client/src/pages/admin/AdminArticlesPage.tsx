@@ -161,17 +161,12 @@ export function AdminArticlesPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: '1.35rem' }}>
-          مدیریت مقالات و جستارهای تخصصی (سئو فارسی)
-        </h1>
+      <div className="admin-page-header">
+        <div>
+          <h1 style={{ margin: 0, fontSize: 'clamp(1.18rem, 2.4vw, 1.35rem)' }}>
+            مدیریت مقالات و جستارهای تخصصی (سئو فارسی)
+          </h1>
+        </div>
         <button type="button" className="btn btn-primary" onClick={openCreate}>
           <Plus size={16} />
           <span>نگارش مقاله جدید</span>
@@ -326,7 +321,7 @@ export function AdminArticlesPage() {
               <span>انتشار عمومی و ثبت خودکار در Sitemap.xml</span>
             </label>
 
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <div className="form-actions">
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -349,7 +344,7 @@ export function AdminArticlesPage() {
       {loading ? (
         <LoadingState />
       ) : (
-        <div className="card data-table-wrap">
+        <div className="card data-table-wrap data-table--cards">
           <table className="data-table">
             <thead>
               <tr>
@@ -364,16 +359,18 @@ export function AdminArticlesPage() {
             <tbody>
               {articles.map((art) => (
                 <tr key={art.id}>
-                  <td>
+                  <td data-label="عنوان مقاله">
                     <strong>{art.title_fa}</strong>
                   </td>
-                  <td>{art.category}</td>
-                  <td>{formatLocaleDate(art.published_at, 'fa')}</td>
-                  <td>
+                  <td data-label="دسته">{art.category}</td>
+                  <td data-label="تاریخ">{formatLocaleDate(art.published_at, 'fa')}</td>
+                  <td data-label="بازدید / پسند">
                     {art.views_count} / {art.likes_count}
                   </td>
-                  <td>{art.is_published ? 'منتشرشده' : 'پیش‌نویس'}</td>
-                  <td>
+                  <td data-label="وضعیت">
+                    {art.is_published ? 'منتشرشده' : 'پیش‌نویس'}
+                  </td>
+                  <td data-label="عملیات">
                     <div style={{ display: 'flex', gap: '0.4rem' }}>
                       <Link
                         to={`/articles/${art.slug}`}
