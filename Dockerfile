@@ -23,6 +23,8 @@ RUN npm ci --omit=dev
 # Stage 3: Minimal Production Runtime Image
 # Default PORT=3000 matches Runflare's standard Docker Expose Port preset
 FROM node:22-bookworm-slim AS runtime
+RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=3000 \
@@ -33,7 +35,7 @@ WORKDIR /app
 
 # Copy compiled server dependencies & source
 COPY --from=server-builder /app/server/node_modules ./server/node_modules
-COPY server/package*.json ./server/
+COPY server/package.json ./server/package.json
 COPY server/src ./server/src
 
 # Copy built frontend SPA + public static banners/logos

@@ -59,9 +59,7 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
 
   it('BannerCarousel renders charter-based overlay text + clickable wide image + 2 arrows', () => {
     const { container } = render(
-      <MemoryRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
+      <MemoryRouter>
         <BannerCarousel banners={SAMPLE_BANNERS} />
       </MemoryRouter>
     );
@@ -88,9 +86,7 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
 
   it('Navbar & Footer render /logo-vira.png, hide admin button, omit شناسه ملی, and display updated phone & address', () => {
     const { container } = render(
-      <MemoryRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
+      <MemoryRouter>
         <Navbar />
         <Footer />
       </MemoryRouter>
@@ -136,9 +132,7 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
     });
 
     render(
-      <MemoryRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
+      <MemoryRouter>
         <AboutPage />
       </MemoryRouter>
     );
@@ -207,10 +201,7 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
     });
 
     render(
-      <MemoryRouter
-        initialEntries={['/admin']}
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
+      <MemoryRouter initialEntries={['/admin']}>
         <Routes>
           <Route
             path="/admin"
