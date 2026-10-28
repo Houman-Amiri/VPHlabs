@@ -1,0 +1,48 @@
+name: VPHLabs CI — Tests & Production Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    name: Backend MVC + SQLite Migrations + React Vite Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            server/package-lock.json
+            client/package-lock.json
+
+      - name: Install Server Dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Install Client Dependencies
+        working-directory: client
+        run: npm ci
+
+      - name: Run Pending SQL Migrations
+        run: npm run migrate
+
+      - name: Run Backend Integration & Security Tests
+        run: npm run test:server
+
+      - name: Verify API Documentation Sync
+        run: npm run docs:api
+
+      - name: Run Front-End Unit & Component Tests
+        run: npm run test:client
+
+      - name: Build Production Front-End Bundle (TypeScript + Vite)
+        run: npm run build
