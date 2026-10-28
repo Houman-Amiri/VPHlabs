@@ -98,7 +98,7 @@ export function ProductsPage() {
   );
 
   return (
-    <div className="container" style={{ paddingBottom: '4rem' }}>
+    <div className="container page-bottom-space">
       <SeoHead
         title={pageTitle}
         description={pageSubtitle}
@@ -111,10 +111,7 @@ export function ProductsPage() {
       </header>
 
       <div className="toolbar-bar">
-        <form
-          onSubmit={handleSearchSubmit}
-          style={{ display: 'flex', gap: '0.5rem', flex: '1 1 280px' }}
-        >
+        <form onSubmit={handleSearchSubmit} className="toolbar-search">
           <input
             type="search"
             className="form-input"
@@ -122,15 +119,19 @@ export function ProductsPage() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
-          <button type="submit" className="btn btn-secondary" aria-label="جستجو">
+          <button
+            type="submit"
+            className="btn btn-secondary"
+            style={{ flexShrink: 0 }}
+            aria-label="جستجو"
+          >
             <Search size={17} />
           </button>
         </form>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
+        <div className="toolbar-filters">
           <select
             className="form-select"
-            style={{ width: 'auto' }}
             aria-label="فیلتر دسته‌بندی"
             value={category}
             onChange={(e) => updateFilter('category', e.target.value)}
@@ -144,7 +145,6 @@ export function ProductsPage() {
 
           <select
             className="form-select"
-            style={{ width: 'auto' }}
             aria-label="مرتب‌سازی"
             value={sortBy}
             onChange={(e) => updateFilter('sortBy', e.target.value)}
@@ -247,9 +247,10 @@ export function ProductsPage() {
 
                 <div
                   style={{
-                    padding: '1rem 1.35rem',
+                    padding: '1rem 1.25rem',
                     borderTop: '1px solid var(--border-subtle)',
                     display: 'flex',
+                    flexWrap: 'wrap',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: '0.5rem',

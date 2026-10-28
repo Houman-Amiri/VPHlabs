@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Globe, Menu, Moon, Search, Sun, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Globe, Menu, Moon, PhoneCall, Search, Sun, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useSiteStore } from '../../store/useSiteStore';
@@ -12,9 +12,23 @@ export function Navbar() {
   const isFa = i18n.language.startsWith('fa');
   const { theme, toggleTheme } = useThemeStore();
   const getText = useSiteStore((s) => s.getText);
+  const location = useLocation();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileOpen]);
 
   const brandName = getText(
     'company.name_fa',
@@ -47,6 +61,14 @@ export function Navbar() {
       <a href="#main-content" className="skip-link">
         {t('nav.skipToContent')}
       </a>
+
+      {mobileOpen && (
+        <div
+          className="mobile-drawer-backdrop"
+          aria-hidden="true"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
 
       <header className="site-header">
         <div className="container navbar-inner">
@@ -85,6 +107,7 @@ export function Navbar() {
               className="icon-btn"
               aria-label={t('nav.searchPlaceholder')}
               onClick={() => {
+                setMobileOpen(false);
                 setSearchOpen(true);
                 trackEvent('open_search_modal');
               }}
@@ -116,7 +139,7 @@ export function Navbar() {
               type="button"
               className="icon-btn mobile-menu-btn"
               aria-expanded={mobileOpen}
-              aria-label="باز کردن منوی موبایل"
+              aria-label={mobileOpen ? 'بستن منوی موبایل' : 'باز کردن منوی موبایل'}
               onClick={() => setMobileOpen((prev) => !prev)}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
@@ -139,6 +162,18 @@ export function Navbar() {
                 {item.label}
               </NavLink>
             ))}
+
+            <div className="mobile-drawer-cta">
+              <Link
+                to="/contact"
+                onClick={() => setMobileOpen(false)}
+                className="btn btn-primary"
+                style={{ width: '100%' }}
+              >
+                <PhoneCall size={16} />
+                <span>{t('home.requestConsult')}</span>
+              </Link>
+            </div>
           </nav>
         )}
       </header>

@@ -61,7 +61,7 @@ export function ServicesPage() {
   );
 
   return (
-    <div className="container" style={{ paddingBottom: '4rem' }}>
+    <div className="container page-bottom-space">
       <SeoHead
         title={pageTitle}
         description={pageSubtitle}
@@ -183,19 +183,15 @@ export function ServicesPage() {
       )}
 
       <div
-        className="card"
+        className="card section-head section-card"
         style={{
-          marginTop: '3rem',
-          padding: '2rem',
-          display: 'flex',
-          flexWrap: 'wrap',
+          marginTop: '2.5rem',
+          marginBottom: 0,
           alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1.25rem',
         }}
       >
         <div>
-          <h2 style={{ margin: '0 0 0.35rem', fontSize: '1.3rem' }}>
+          <h2 style={{ margin: '0 0 0.35rem', fontSize: 'clamp(1.16rem, 2.3vw, 1.3rem)' }}>
             {ctaTitle}
           </h2>
           <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.92rem' }}>

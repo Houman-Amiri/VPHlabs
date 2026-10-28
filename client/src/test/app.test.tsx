@@ -7,6 +7,7 @@ import { BannerCarousel } from '../components/home/BannerCarousel';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { AboutPage } from '../pages/AboutPage';
+import { AdminLayout } from '../pages/admin/AdminLayout';
 import { RequireRole } from '../components/auth/RouteGuards';
 import { useThemeStore } from '../store/useThemeStore';
 import { useAuthStore } from '../store/useAuthStore';
@@ -217,5 +218,97 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('۴۰۳');
     expect(screen.queryByText('Secret Admin Panel')).toBeNull();
+  });
+
+  it('Mobile Navbar drawer opens, renders backdrop & CTA, and closes on backdrop click or Escape', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+
+    const toggleBtn = screen.getByRole('button', { name: 'باز کردن منوی موبایل' });
+    expect(toggleBtn).toHaveAttribute('aria-expanded', 'false');
+    expect(container.querySelector('.mobile-drawer')).toBeNull();
+
+    fireEvent.click(toggleBtn);
+    const closeBtn = screen.getByRole('button', { name: 'بستن منوی موبایل' });
+    expect(closeBtn).toHaveAttribute('aria-expanded', 'true');
+    expect(container.querySelector('.mobile-drawer')).not.toBeNull();
+    expect(container.querySelector('.mobile-drawer-backdrop')).not.toBeNull();
+
+    // Backdrop dismisses mobile drawer
+    fireEvent.click(container.querySelector('.mobile-drawer-backdrop')!);
+    expect(container.querySelector('.mobile-drawer')).toBeNull();
+
+    // Escape key dismisses mobile drawer
+    fireEvent.click(screen.getByRole('button', { name: 'باز کردن منوی موبایل' }));
+    expect(container.querySelector('.mobile-drawer')).not.toBeNull();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(container.querySelector('.mobile-drawer')).toBeNull();
+  });
+
+  it('BannerCarousel supports mobile touch swipe gestures', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <BannerCarousel banners={SAMPLE_BANNERS} />
+      </MemoryRouter>
+    );
+
+    const frame = container.querySelector('.banner-carousel-wrapper')!;
+    expect(
+      screen.getByText(
+        'طراحی و تولید نرم‌افزارهای سفارشی و سامانه‌های هوش مصنوعی سازمانی'
+      )
+    ).toBeInTheDocument();
+
+    // Swipe horizontally on mobile touch screen
+    fireEvent.touchStart(frame, {
+      touches: [{ clientX: 280, clientY: 160 }],
+    });
+    fireEvent.touchEnd(frame, {
+      changedTouches: [{ clientX: 120, clientY: 164 }],
+    });
+
+    expect(
+      screen.getByText('طراحی و اجرای سیستم‌های کنترل و اتوماسیون صنعتی هوشمند')
+    ).toBeInTheDocument();
+  });
+
+  it('AdminLayout renders mobile collapsible menu bar and toggles sidebar', () => {
+    useAuthStore.setState({
+      user: {
+        id: 1,
+        name: 'مدیر سیستم',
+        email: 'VPHAdmin',
+        role: 'admin',
+        is_active: true,
+        created_at: '',
+      },
+      isInitialized: true,
+      isLoading: false,
+    });
+
+    const { container } = render(
+      <MemoryRouter initialEntries={['/admin/products']}>
+        <Routes>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="products" element={<div>لیست محصولات</div>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const sidebar = container.querySelector('.admin-sidebar')!;
+    expect(sidebar.classList.contains('is-open')).toBe(false);
+
+    const mobileToggle = screen.getByRole('button', {
+      name: 'باز کردن منوی پنل مدیریت',
+    });
+    fireEvent.click(mobileToggle);
+    expect(sidebar.classList.contains('is-open')).toBe(true);
+
+    fireEvent.click(mobileToggle);
+    expect(sidebar.classList.contains('is-open')).toBe(false);
   });
 });

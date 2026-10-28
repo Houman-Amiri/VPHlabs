@@ -111,16 +111,16 @@ export function LiveSolutionMatcher() {
   );
 
   return (
-    <div className="card" style={{ padding: '2rem' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
+    <div className="card section-card">
+      <div style={{ marginBottom: '1.35rem' }}>
         <span className="badge" style={{ marginBottom: '0.75rem' }}>
           <span className="pulse-dot" />
-          {matcherBadge}
+          <span>{matcherBadge}</span>
         </span>
-        <h2 style={{ margin: '0.25rem 0 0.5rem', fontSize: '1.5rem' }}>
+        <h2 style={{ margin: '0.25rem 0 0.5rem', fontSize: 'clamp(1.22rem, 2.5vw, 1.5rem)' }}>
           {matcherTitle}
         </h2>
-        <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+        <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.94rem' }}>
           {matcherSubtitle}
         </p>
       </div>
@@ -128,12 +128,7 @@ export function LiveSolutionMatcher() {
       <div
         role="tablist"
         aria-label={matcherTitle}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '0.75rem',
-          marginBottom: '1.5rem',
-        }}
+        className="matcher-tabs"
       >
         {BLUEPRINTS.map((item) => {
           const Icon = item.icon;
@@ -144,25 +139,17 @@ export function LiveSolutionMatcher() {
               type="button"
               role="tab"
               aria-selected={isSelected}
+              className="matcher-tab-btn"
               onClick={() => {
                 setSelectedId(item.id);
                 trackEvent('solution_matcher_select', { sector: item.id });
               }}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.65rem',
-                padding: '0.9rem 1rem',
-                borderRadius: '0.75rem',
-                cursor: 'pointer',
-                textAlign: 'start',
-                fontWeight: 600,
                 background: isSelected ? 'var(--bg-subtle)' : 'var(--bg-elevated)',
                 color: isSelected ? 'var(--accent-primary)' : 'var(--text-primary)',
                 border: `1px solid ${
                   isSelected ? 'var(--border-strong)' : 'var(--border-subtle)'
                 }`,
-                transition: 'all 0.18s ease',
               }}
             >
               <Icon size={19} />
@@ -172,15 +159,7 @@ export function LiveSolutionMatcher() {
         })}
       </div>
 
-      <div
-        role="tabpanel"
-        style={{
-          background: 'var(--bg-elevated)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: '0.9rem',
-          padding: '1.5rem',
-        }}
-      >
+      <div role="tabpanel" className="matcher-panel">
         <div className="grid-2" style={{ alignItems: 'center' }}>
           <div>
             <div
@@ -193,7 +172,7 @@ export function LiveSolutionMatcher() {
             >
               {isFa ? 'معماری پیشنهادی ویرا پردازش هومان' : 'Recommended VPH Architecture'}
             </div>
-            <p style={{ margin: '0 0 1rem', fontSize: '1rem', fontWeight: 500 }}>
+            <p style={{ margin: '0 0 1rem', fontSize: '0.98rem', fontWeight: 500 }}>
               {isFa ? active.architectureFa : active.architectureEn}
             </p>
             <div
@@ -225,7 +204,7 @@ export function LiveSolutionMatcher() {
               background: 'var(--bg-surface)',
               border: '1px solid var(--border-subtle)',
               borderRadius: '0.85rem',
-              padding: '1.25rem',
+              padding: '1.15rem',
               display: 'flex',
               flexDirection: 'column',
               gap: '0.85rem',
@@ -234,10 +213,10 @@ export function LiveSolutionMatcher() {
             <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
               {isFa ? 'محصول پیشنهادی مرتبط' : 'Recommended Flagship Product'}
             </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+            <div style={{ fontSize: '1.06rem', fontWeight: 700 }}>
               {isFa ? active.recommendedNameFa : active.recommendedNameEn}
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem' }}>
+            <div className="cta-actions">
               <Link
                 to={`/products/${active.recommendedSlug}`}
                 className="btn btn-primary"

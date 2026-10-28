@@ -80,7 +80,7 @@ export function AboutPage() {
   const ceoName = getText('company.ceo_name', lang, 'شهرام امیری');
 
   return (
-    <div className="container" style={{ paddingBottom: '4rem' }}>
+    <div className="container page-bottom-space">
       <SeoHead
         title={`${t('nav.about')} — ${getText('company.legal_name_fa', lang, 'شرکت ویرا پردازش هومان')}`}
         description={storyBody}
@@ -110,24 +110,13 @@ export function AboutPage() {
               marginBottom: '1.25rem',
             }}
           >
-            <FileCheck2 size={22} style={{ color: 'var(--accent-primary)' }} />
-            <h2 style={{ margin: 0, fontSize: '1.22rem' }}>{legalCardTitle}</h2>
+            <FileCheck2 size={22} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+            <h2 style={{ margin: 0, fontSize: '1.18rem' }}>{legalCardTitle}</h2>
           </div>
 
-          <dl
-            style={{
-              margin: 0,
-              display: 'grid',
-              gridTemplateColumns: '1fr 1.25fr',
-              rowGap: '1rem',
-              columnGap: '1rem',
-              fontSize: '0.94rem',
-            }}
-          >
-            <dt style={{ color: 'var(--text-secondary)' }}>
-              {t('about.entityType')}:
-            </dt>
-            <dd style={{ margin: 0, fontWeight: 600 }}>
+          <dl className="legal-dl">
+            <dt>{t('about.entityType')}:</dt>
+            <dd style={{ fontWeight: 600 }}>
               {getText(
                 'company.legal_name_fa',
                 lang,
@@ -135,12 +124,9 @@ export function AboutPage() {
               )}
             </dd>
 
-            <dt style={{ color: 'var(--text-secondary)' }}>
-              {t('about.regNo')}:
-            </dt>
+            <dt>{t('about.regNo')}:</dt>
             <dd
               style={{
-                margin: 0,
                 fontWeight: 700,
                 color: 'var(--accent-primary)',
               }}
@@ -148,15 +134,11 @@ export function AboutPage() {
               {getText('company.reg_number', lang, '۳۵۴۵')}
             </dd>
 
-            <dt style={{ color: 'var(--text-secondary)' }}>
-              {t('about.ceo')}:
-            </dt>
-            <dd style={{ margin: 0, fontWeight: 700 }}>{ceoName}</dd>
+            <dt>{t('about.ceo')}:</dt>
+            <dd style={{ fontWeight: 700 }}>{ceoName}</dd>
 
-            <dt style={{ color: 'var(--text-secondary)' }}>
-              {t('about.postalCode')}:
-            </dt>
-            <dd style={{ margin: 0 }} className="mono">
+            <dt>{t('about.postalCode')}:</dt>
+            <dd className="mono">
               {getText('contact.postal_code', lang, '6571611860')}
             </dd>
           </dl>
@@ -263,12 +245,8 @@ export function AboutPage() {
                 >
                   <div>
                     <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '1rem',
-                        marginBottom: '1rem',
-                      }}
+                      className="team-member-head"
+                      style={{ marginBottom: '1rem' }}
                     >
                       {member.avatar_url ? (
                         <img
@@ -283,13 +261,13 @@ export function AboutPage() {
                         </div>
                       )}
 
-                      <div>
-                        <h3 style={{ margin: '0 0 0.25rem', fontSize: '1.12rem' }}>
+                      <div style={{ minWidth: 0 }}>
+                        <h3 style={{ margin: '0 0 0.25rem', fontSize: '1.1rem' }}>
                           {displayName}
                         </h3>
                         <div
                           style={{
-                            fontSize: '0.86rem',
+                            fontSize: '0.85rem',
                             fontWeight: 600,
                             color: 'var(--accent-primary)',
                           }}
@@ -388,19 +366,12 @@ export function AboutPage() {
 
       {/* All 12 Charter Clauses */}
       <section className="card">
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '1rem',
-            marginBottom: '1.5rem',
-          }}
-        >
-          <h2 style={{ margin: 0, fontSize: '1.25rem' }}>
-            {charterSectionTitle}
-          </h2>
+        <div className="section-head" style={{ marginBottom: '1.5rem', alignItems: 'center' }}>
+          <div>
+            <h2 style={{ margin: 0, fontSize: '1.22rem' }}>
+              {charterSectionTitle}
+            </h2>
+          </div>
           <Link to="/contact" className="btn btn-primary">
             {t('home.requestConsult')}
           </Link>

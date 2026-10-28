@@ -43,11 +43,11 @@ export function App() {
   }, [fetchBootstrap, checkSession]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div className="app-shell">
       <ScrollToTopOnNavigate />
       <Navbar />
 
-      <main id="main-content" style={{ flex: 1 }}>
+      <main id="main-content" className="app-main">
         <Routes>
           {/* Public Separated Pages (React Router v6 matches case-insensitively: /contact & /Contact, /articles/:id & /Articles/:id) */}
           <Route path="/" element={<HomePage />} />

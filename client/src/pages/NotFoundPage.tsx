@@ -9,7 +9,7 @@ export function NotFoundPage() {
   return (
     <div className="container page-section" style={{ textAlign: 'center' }}>
       <SeoHead title="۴۰۴ — صفحه یافت نشد" />
-      <div className="card" style={{ maxWidth: '540px', marginInline: 'auto', padding: '3rem 2rem' }}>
+      <div className="card auth-card" style={{ maxWidth: '540px', paddingBlock: '2.5rem' }}>
         <div
           className="mono"
           style={{ fontSize: '3rem', fontWeight: 800, color: 'var(--accent-primary)' }}

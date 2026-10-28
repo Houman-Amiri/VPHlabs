@@ -63,18 +63,9 @@ export function AdminDashboardPage() {
     <div>
       <SeoHead title="پیشخوان مدیریت | ویرا پردازش هومان" />
 
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.75rem',
-        }}
-      >
+      <div className="admin-page-header" style={{ marginBottom: '1.75rem' }}>
         <div>
-          <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.5rem' }}>
+          <h1 style={{ margin: '0 0 0.25rem', fontSize: 'clamp(1.22rem, 2.5vw, 1.5rem)' }}>
             پیشخوان مدیریت پویای ویرا پردازش هومان
           </h1>
           <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
@@ -82,7 +73,7 @@ export function AdminDashboardPage() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+        <div className="cta-actions">
           <Link to="/admin/articles" className="btn btn-primary">
             <Plus size={16} />
             <span>انتشار مقاله جدید</span>

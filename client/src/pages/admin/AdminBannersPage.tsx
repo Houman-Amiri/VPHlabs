@@ -136,18 +136,9 @@ export function AdminBannersPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-        }}
-      >
+      <div className="admin-page-header">
         <div>
-          <h1 style={{ margin: '0 0 0.25rem', fontSize: '1.35rem' }}>
+          <h1 style={{ margin: '0 0 0.25rem', fontSize: 'clamp(1.18rem, 2.4vw, 1.35rem)' }}>
             مدیریت بنرهای اسلایدر صفحه اصلی
           </h1>
           <p
@@ -318,7 +309,7 @@ export function AdminBannersPage() {
               <span>فعال در اسلایدر صفحه اصلی</span>
             </label>
 
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <div className="form-actions">
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -389,6 +380,7 @@ export function AdminBannersPage() {
               <div
                 style={{
                   display: 'flex',
+                  flexWrap: 'wrap',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   gap: '0.5rem',
@@ -398,7 +390,11 @@ export function AdminBannersPage() {
               >
                 <div
                   className="mono"
-                  style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--text-muted)',
+                    wordBreak: 'break-word',
+                  }}
                 >
                   {b.target_url} • {b.is_active ? 'فعال' : 'غیرفعال'} (#
                   {b.sort_order})

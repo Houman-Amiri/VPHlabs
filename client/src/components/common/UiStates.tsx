@@ -114,10 +114,11 @@ export function Pagination({
       aria-label="Pagination"
       style={{
         display: 'flex',
+        flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '0.75rem',
-        marginTop: '2.5rem',
+        gap: '0.65rem',
+        marginTop: '2.25rem',
       }}
     >
       <button

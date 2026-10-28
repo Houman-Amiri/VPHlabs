@@ -162,15 +162,12 @@ export function AdminProductsPage() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: '1.35rem' }}>مدیریت محصولات و راهکارها</h1>
+      <div className="admin-page-header">
+        <div>
+          <h1 style={{ margin: 0, fontSize: 'clamp(1.18rem, 2.4vw, 1.35rem)' }}>
+            مدیریت محصولات و راهکارها
+          </h1>
+        </div>
         <button type="button" className="btn btn-primary" onClick={openCreate}>
           <Plus size={16} />
           <span>محصول جدید</span>
@@ -327,7 +324,7 @@ export function AdminProductsPage() {
               </label>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <div className="form-actions">
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -350,7 +347,7 @@ export function AdminProductsPage() {
       {loading ? (
         <LoadingState />
       ) : (
-        <div className="card data-table-wrap">
+        <div className="card data-table-wrap data-table--cards">
           <table className="data-table">
             <thead>
               <tr>
@@ -364,7 +361,7 @@ export function AdminProductsPage() {
             <tbody>
               {products.map((p) => (
                 <tr key={p.id}>
-                  <td>
+                  <td data-label="عنوان محصول">
                     <strong>{p.title_fa}</strong>
                     {p.is_featured && (
                       <span
@@ -375,10 +372,14 @@ export function AdminProductsPage() {
                       </span>
                     )}
                   </td>
-                  <td className="mono">{p.slug}</td>
-                  <td>{p.category}</td>
-                  <td>{p.is_published ? 'منتشرشده' : 'پیش‌نویس'}</td>
-                  <td>
+                  <td data-label="اسلاگ" className="mono">
+                    {p.slug}
+                  </td>
+                  <td data-label="دسته">{p.category}</td>
+                  <td data-label="وضعیت">
+                    {p.is_published ? 'منتشرشده' : 'پیش‌نویس'}
+                  </td>
+                  <td data-label="عملیات">
                     <div style={{ display: 'flex', gap: '0.4rem' }}>
                       <button
                         type="button"

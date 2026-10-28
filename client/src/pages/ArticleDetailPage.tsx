@@ -261,7 +261,7 @@ export function ArticleDetailPage() {
   ];
 
   return (
-    <div className="container" style={{ paddingBlock: '2rem 4rem' }}>
+    <div className="container page-bottom-space" style={{ paddingTop: '1.75rem' }}>
       <SeoHead
         title={article.meta_title || title}
         description={article.meta_description || excerpt}
@@ -272,14 +272,14 @@ export function ArticleDetailPage() {
         jsonLd={articleJsonLd}
       />
 
-      <div style={{ marginBottom: '1.25rem' }}>
+      <div style={{ marginBottom: '1.1rem' }}>
         <Link to="/articles" className="btn btn-ghost">
           <ArrowRight size={16} style={{ transform: isFa ? 'none' : 'rotate(180deg)' }} />
           <span>{t('common.backToList')}</span>
         </Link>
       </div>
 
-      <article className="card" style={{ padding: 'clamp(1.35rem, 3.5vw, 2.75rem)' }}>
+      <article className="card" style={{ padding: 'clamp(1.15rem, 3.5vw, 2.75rem)' }}>
         <header style={{ marginBottom: '2rem' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center', marginBottom: '1rem' }}>
             <span className="badge">{article.category}</span>
@@ -423,7 +423,7 @@ export function ArticleDetailPage() {
             ))}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          <div className="cta-actions">
             <button
               type="button"
               className={`btn ${liked ? 'btn-primary' : 'btn-secondary'}`}

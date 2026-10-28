@@ -1,13 +1,16 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   FileText,
   Image,
   Inbox,
   LayoutDashboard,
   LogOut,
+  Menu,
   Package,
   Sliders,
   Users,
+  X,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useToastStore } from '../../store/useToastStore';
@@ -17,6 +20,12 @@ export function AdminLayout() {
   const logout = useAuthStore((s) => s.logout);
   const addToast = useToastStore((s) => s.addToast);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   async function handleLogout() {
     await logout();
@@ -34,9 +43,42 @@ export function AdminLayout() {
     { to: '/admin/messages', label: 'پیام‌ها و درخواست‌های مشاوره', icon: Inbox },
   ];
 
+  const activeLink =
+    links.find((item) =>
+      item.end
+        ? location.pathname === item.to
+        : location.pathname.startsWith(item.to)
+    ) || links[0];
+
   return (
     <div className="container admin-shell">
-      <aside className="admin-sidebar">
+      <div className="card admin-mobile-bar">
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontWeight: 700, fontSize: '0.94rem' }}>
+            {activeLink.label}
+          </div>
+          <div
+            className="mono"
+            style={{ fontSize: '0.73rem', color: 'var(--text-muted)' }}
+          >
+            {user?.name || 'مدیر سیستم'} • {user?.email}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="btn btn-secondary"
+          style={{ padding: '0.45rem 0.85rem', fontSize: '0.84rem', flexShrink: 0 }}
+          aria-expanded={menuOpen}
+          aria-label="باز کردن منوی پنل مدیریت"
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
+          {menuOpen ? <X size={16} /> : <Menu size={16} />}
+          <span>{menuOpen ? 'بستن منو' : 'منوی مدیریت'}</span>
+        </button>
+      </div>
+
+      <aside className={`admin-sidebar${menuOpen ? ' is-open' : ''}`}>
         <div
           style={{
             padding: '0.5rem 0.65rem 1rem',
@@ -60,6 +102,7 @@ export function AdminLayout() {
                 key={item.to}
                 to={item.to}
                 end={item.end}
+                onClick={() => setMenuOpen(false)}
                 className={({ isActive }) =>
                   `admin-nav-link${isActive ? ' active' : ''}`
                 }
@@ -82,7 +125,7 @@ export function AdminLayout() {
         </button>
       </aside>
 
-      <section>
+      <section style={{ minWidth: 0 }}>
         <Outlet />
       </section>
     </div>
