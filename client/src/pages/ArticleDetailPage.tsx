@@ -318,9 +318,9 @@ export function ArticleDetailPage() {
 
           <h1
             style={{
-              margin: '0 0 1rem',
-              fontSize: 'clamp(1.6rem, 3.2vw, 2.35rem)',
-              lineHeight: 1.4,
+              margin: '0 0 0.85rem',
+              fontSize: 'clamp(1.28rem, 3.2vw, 2.3rem)',
+              lineHeight: 1.42,
             }}
           >
             {title}
@@ -328,8 +328,8 @@ export function ArticleDetailPage() {
 
           <p
             style={{
-              margin: '0 0 1.25rem',
-              fontSize: '1.06rem',
+              margin: '0 0 1.2rem',
+              fontSize: '0.96rem',
               color: 'var(--text-secondary)',
             }}
           >

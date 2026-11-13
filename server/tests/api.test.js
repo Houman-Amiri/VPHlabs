@@ -133,7 +133,7 @@ test('GET /api/health returns database connection & applied migrations status', 
   assert.equal(res.body.data.database, 'connected');
   assert.equal(res.body.data.migrationsCount, 5);
   assert.equal(res.body.data.adminReady, true);
-  assert.equal(res.body.data.build, '2026.10.28-r7');
+  assert.equal(res.body.data.build, '2026.10.28-r8');
 });
 
 test('GET /api/content/bootstrap returns charter services, charter banners, team members, courses & updated contact info', async () => {
