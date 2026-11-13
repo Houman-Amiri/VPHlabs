@@ -280,8 +280,14 @@ export function HomePage() {
                         marginBottom: '0.85rem',
                       }}
                     >
-                      {product.badge && (
-                        <span className="badge">{product.badge}</span>
+                      {(isFa
+                        ? product.badge
+                        : product.badge_en || product.badge) && (
+                        <span className="badge">
+                          {isFa
+                            ? product.badge
+                            : product.badge_en || product.badge}
+                        </span>
                       )}
                       <span
                         className="mono"

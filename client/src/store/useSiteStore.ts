@@ -3,6 +3,7 @@ import apiClient from '../lib/axios';
 import type {
   ApiSuccessResponse,
   Banner,
+  CourseItem,
   ServiceItem,
   SiteContentMap,
   TeamMember,
@@ -13,6 +14,7 @@ interface BootstrapPayload {
   banners: Banner[];
   services: ServiceItem[];
   teamMembers: TeamMember[];
+  courses?: CourseItem[];
 }
 
 interface SiteState {
@@ -20,6 +22,7 @@ interface SiteState {
   banners: Banner[];
   services: ServiceItem[];
   teamMembers: TeamMember[];
+  courses: CourseItem[];
   isLoading: boolean;
   error: string | null;
   hasLoaded: boolean;
@@ -32,6 +35,7 @@ export const useSiteStore = create<SiteState>((set, get) => ({
   banners: [],
   services: [],
   teamMembers: [],
+  courses: [],
   isLoading: false,
   error: null,
   hasLoaded: false,
@@ -48,6 +52,7 @@ export const useSiteStore = create<SiteState>((set, get) => ({
         banners: res.data.data.banners || [],
         services: res.data.data.services || [],
         teamMembers: res.data.data.teamMembers || [],
+        courses: res.data.data.courses || [],
         isLoading: false,
         hasLoaded: true,
       });

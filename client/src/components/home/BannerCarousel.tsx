@@ -19,6 +19,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
   const { t, i18n } = useTranslation();
   const isFa = i18n.language.startsWith('fa');
   const [activeIndex, setActiveIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next');
   const [paused, setPaused] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
@@ -27,11 +28,13 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
 
   const goPrev = useCallback(() => {
     if (count <= 1) return;
+    setSlideDirection('prev');
     setActiveIndex((idx) => (idx - 1 + count) % count);
   }, [count]);
 
   const goNext = useCallback(() => {
     if (count <= 1) return;
+    setSlideDirection('next');
     setActiveIndex((idx) => (idx + 1) % count);
   }, [count]);
 
@@ -103,15 +106,23 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
         decoding="async"
       />
       {hasOverlayText && (
-        <div className="banner-slide-overlay">
+        <div
+          className={`banner-slide-overlay banner-slide-overlay--${slideDirection}`}
+        >
           {badgeText && (
-            <span className="banner-badge">
+            <span className="banner-badge banner-anim-badge">
               <Sparkles size={13} />
               <span>{badgeText}</span>
             </span>
           )}
-          {titleText && <h2 className="banner-title">{titleText}</h2>}
-          {subtitleText && <p className="banner-subtitle">{subtitleText}</p>}
+          {titleText && (
+            <h2 className="banner-title banner-anim-title">{titleText}</h2>
+          )}
+          {subtitleText && (
+            <p className="banner-subtitle banner-anim-subtitle">
+              {subtitleText}
+            </p>
+          )}
         </div>
       )}
     </>
@@ -136,10 +147,12 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
       <div className="banner-carousel">
         {isExternal ? (
           <a
+            key={`banner-slide-${current.id}-${activeIndex}`}
             href={current.target_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="banner-slide-link"
+            className="banner-slide-link banner-slide-animated"
+            data-direction={slideDirection}
             onClick={() =>
               trackEvent('banner_click', {
                 bannerId: current.id,
@@ -151,8 +164,10 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
           </a>
         ) : (
           <Link
+            key={`banner-slide-${current.id}-${activeIndex}`}
             to={current.target_url || '/products'}
-            className="banner-slide-link"
+            className="banner-slide-link banner-slide-animated"
+            data-direction={slideDirection}
             onClick={() =>
               trackEvent('banner_click', {
                 bannerId: current.id,
@@ -162,6 +177,14 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
           >
             {slideInner}
           </Link>
+        )}
+
+        {count > 1 && !paused && (
+          <span
+            key={`banner-progress-${activeIndex}`}
+            className="banner-progress-bar"
+            aria-hidden="true"
+          />
         )}
 
         {count > 1 && (

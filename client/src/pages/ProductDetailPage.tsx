@@ -58,12 +58,19 @@ export function ProductDetailPage() {
   }
 
   const title = isFa ? product.title_fa : product.title_en || product.title_fa;
+  const badgeText = isFa
+    ? product.badge
+    : product.badge_en || product.badge;
   const summary = isFa
     ? product.summary_fa
     : product.summary_en || product.summary_fa;
   const description = isFa
     ? product.description_fa
     : product.description_en || product.description_fa;
+  const localizedFeatures =
+    !isFa && product.features_en && product.features_en.length > 0
+      ? product.features_en
+      : product.features;
 
   const productJsonLd = {
     '@context': 'https://schema.org',
@@ -100,7 +107,7 @@ export function ProductDetailPage() {
         <div className="grid-2 detail-grid" style={{ alignItems: 'start' }}>
           <div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '1rem' }}>
-              {product.badge && <span className="badge">{product.badge}</span>}
+              {badgeText && <span className="badge">{badgeText}</span>}
               <span className="badge mono">
                 <Cpu size={13} />
                 ISIC {product.isic_code}
@@ -177,7 +184,7 @@ export function ProductDetailPage() {
             ))}
           </div>
 
-          {product.features.length > 0 && (
+          {localizedFeatures.length > 0 && (
             <div
               style={{
                 background: 'var(--bg-elevated)',
@@ -200,7 +207,7 @@ export function ProductDetailPage() {
                   gap: '0.85rem',
                 }}
               >
-                {product.features.map((feat, i) => (
+                {localizedFeatures.map((feat, i) => (
                   <li
                     key={i}
                     style={{

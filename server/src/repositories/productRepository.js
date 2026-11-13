@@ -11,14 +11,22 @@ const ALLOWED_SORT_COLUMNS = {
 function hydrateProduct(row) {
   if (!row) return null;
   let features = [];
+  let features_en = [];
   try {
     features = JSON.parse(row.features_json || '[]');
   } catch {
     features = [];
   }
+  try {
+    features_en = JSON.parse(row.features_en_json || '[]');
+  } catch {
+    features_en = [];
+  }
   return {
     ...row,
+    badge_en: row.badge_en || '',
     features,
+    features_en,
     demo_available: Boolean(row.demo_available),
     is_featured: Boolean(row.is_featured),
     is_published: Boolean(row.is_published),
@@ -68,9 +76,9 @@ const productRepository = {
     if (q && String(q).trim()) {
       const pattern = `%${String(q).trim()}%`;
       conditions.push(
-        '(title_fa LIKE ? OR title_en LIKE ? OR summary_fa LIKE ? OR summary_en LIKE ? OR description_fa LIKE ?)'
+        '(title_fa LIKE ? OR title_en LIKE ? OR summary_fa LIKE ? OR summary_en LIKE ? OR description_fa LIKE ? OR description_en LIKE ? OR badge LIKE ? OR badge_en LIKE ?)'
       );
-      params.push(pattern, pattern, pattern, pattern, pattern);
+      params.push(pattern, pattern, pattern, pattern, pattern, pattern, pattern, pattern);
     }
 
     const whereClause =
@@ -131,13 +139,13 @@ const productRepository = {
     const stmt = prepareStmt(`
       INSERT INTO products (
         slug, title_fa, title_en, summary_fa, summary_en,
-        description_fa, description_en, category, badge, image_url,
-        features_json, target_sector, isic_code, demo_available,
+        description_fa, description_en, category, badge, badge_en, image_url,
+        features_json, features_en_json, target_sector, isic_code, demo_available,
         is_featured, is_published, sort_order
       ) VALUES (
         @slug, @title_fa, @title_en, @summary_fa, @summary_en,
-        @description_fa, @description_en, @category, @badge, @image_url,
-        @features_json, @target_sector, @isic_code, @demo_available,
+        @description_fa, @description_en, @category, @badge, @badge_en, @image_url,
+        @features_json, @features_en_json, @target_sector, @isic_code, @demo_available,
         @is_featured, @is_published, @sort_order
       )
     `);
@@ -152,8 +160,10 @@ const productRepository = {
       description_en: data.description_en || '',
       category: data.category || 'enterprise-ai',
       badge: data.badge || '',
+      badge_en: data.badge_en || '',
       image_url: data.image_url || '',
       features_json: JSON.stringify(data.features || []),
+      features_en_json: JSON.stringify(data.features_en || []),
       target_sector: data.target_sector || 'enterprise',
       isic_code: data.isic_code || '620101',
       demo_available: data.demo_available === false ? 0 : 1,
@@ -180,8 +190,10 @@ const productRepository = {
         description_en = @description_en,
         category = @category,
         badge = @badge,
+        badge_en = @badge_en,
         image_url = @image_url,
         features_json = @features_json,
+        features_en_json = @features_en_json,
         target_sector = @target_sector,
         isic_code = @isic_code,
         demo_available = @demo_available,
@@ -203,8 +215,10 @@ const productRepository = {
       description_en: data.description_en ?? existing.description_en,
       category: data.category ?? existing.category,
       badge: data.badge ?? existing.badge,
+      badge_en: data.badge_en ?? existing.badge_en,
       image_url: data.image_url ?? existing.image_url,
       features_json: JSON.stringify(data.features ?? existing.features),
+      features_en_json: JSON.stringify(data.features_en ?? existing.features_en),
       target_sector: data.target_sector ?? existing.target_sector,
       isic_code: data.isic_code ?? existing.isic_code,
       demo_available:

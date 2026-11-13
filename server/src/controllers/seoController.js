@@ -19,6 +19,7 @@ const seoController = {
       { loc: '/', priority: '1.0', changefreq: 'daily' },
       { loc: '/products', priority: '0.9', changefreq: 'weekly' },
       { loc: '/services', priority: '0.8', changefreq: 'monthly' },
+      { loc: '/training', priority: '0.85', changefreq: 'weekly' },
       { loc: '/articles', priority: '0.9', changefreq: 'daily' },
       { loc: '/about', priority: '0.7', changefreq: 'monthly' },
       { loc: '/contact', priority: '0.8', changefreq: 'monthly' },

@@ -33,6 +33,7 @@ const createContactSchema = z.object({
       'custom-software',
       'industrial-automation',
       'network-infrastructure',
+      'training',
       'support',
     ])
     .default('ai-consulting'),

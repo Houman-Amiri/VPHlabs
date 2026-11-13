@@ -6,6 +6,7 @@ const articleRepository = require('../repositories/articleRepository');
 const bannerRepository = require('../repositories/bannerRepository');
 const serviceRepository = require('../repositories/serviceRepository');
 const teamRepository = require('../repositories/teamRepository');
+const courseRepository = require('../repositories/courseRepository');
 const contactRepository = require('../repositories/contactRepository');
 const { asyncHandler } = require('../middlewares/errorHandler');
 
@@ -18,7 +19,7 @@ const healthController = {
       data: {
         status: 'ok',
         service: 'V.I.R.A Pardazesh Hoomaan API',
-        build: '2026.10.28-r6',
+        build: '2026.10.28-r7',
         adminReady: Boolean(adminRow && adminRow.is_active && adminRow.role === 'admin'),
         timestamp: new Date().toISOString(),
         uptimeSeconds: Math.round(process.uptime()),
@@ -37,6 +38,7 @@ const healthController = {
         bannersCount: bannerRepository.countAll(),
         servicesCount: serviceRepository.countAll(),
         teamCount: teamRepository.countAll(),
+        coursesCount: courseRepository.countAll(),
         messages: contactRepository.countByStatus(),
         system: {
           uptimeSeconds: Math.round(process.uptime()),

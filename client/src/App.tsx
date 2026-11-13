@@ -8,6 +8,7 @@ import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
 import { ServicesPage } from './pages/ServicesPage';
+import { TrainingPage } from './pages/TrainingPage';
 import { ArticlesPage } from './pages/ArticlesPage';
 import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { AboutPage } from './pages/AboutPage';
@@ -17,6 +18,7 @@ import { AdminLoginPage } from './pages/admin/AdminLoginPage';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { AdminProductsPage } from './pages/admin/AdminProductsPage';
+import { AdminTrainingPage } from './pages/admin/AdminTrainingPage';
 import { AdminArticlesPage } from './pages/admin/AdminArticlesPage';
 import { AdminBannersPage } from './pages/admin/AdminBannersPage';
 import { AdminTeamPage } from './pages/admin/AdminTeamPage';
@@ -54,6 +56,7 @@ export function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/training" element={<TrainingPage />} />
           <Route path="/articles" element={<ArticlesPage />} />
           <Route path="/articles/:id" element={<ArticleDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -72,6 +75,7 @@ export function App() {
             >
               <Route index element={<AdminDashboardPage />} />
               <Route path="products" element={<AdminProductsPage />} />
+              <Route path="training" element={<AdminTrainingPage />} />
               <Route path="articles" element={<AdminArticlesPage />} />
               <Route path="banners" element={<AdminBannersPage />} />
               <Route path="team" element={<AdminTeamPage />} />

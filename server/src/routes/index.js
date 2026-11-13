@@ -6,6 +6,7 @@ const articleRoutes = require('./articleRoutes');
 const bannerRoutes = require('./bannerRoutes');
 const serviceRoutes = require('./serviceRoutes');
 const teamRoutes = require('./teamRoutes');
+const courseRoutes = require('./courseRoutes');
 const contentRoutes = require('./contentRoutes');
 const contactRoutes = require('./contactRoutes');
 const uploadRoutes = require('./uploadRoutes');
@@ -21,6 +22,7 @@ const MOUNTED_API_MODULES = [
   { prefix: '/api/banners', router: bannerRoutes, group: 'Home Carousel Banners' },
   { prefix: '/api/services', router: serviceRoutes, group: 'Charter Services (اساسنامه)' },
   { prefix: '/api/team', router: teamRoutes, group: 'Team & Colleagues (همکاران)' },
+  { prefix: '/api/courses', router: courseRoutes, group: 'Training Courses (آموزش)' },
   { prefix: '/api/content', router: contentRoutes, group: 'Dynamic Page Texts CMS' },
   { prefix: '/api/contacts', router: contactRoutes, group: 'Contact & Consultation Inquiries' },
   { prefix: '/api/uploads', router: uploadRoutes, group: 'Media Uploads (Multer Local/S3)' },
@@ -34,6 +36,7 @@ apiRouter.use('/articles', articleRoutes);
 apiRouter.use('/banners', bannerRoutes);
 apiRouter.use('/services', serviceRoutes);
 apiRouter.use('/team', teamRoutes);
+apiRouter.use('/courses', courseRoutes);
 apiRouter.use('/content', contentRoutes);
 apiRouter.use('/contacts', contactRoutes);
 apiRouter.use('/uploads', uploadRoutes);

@@ -37,8 +37,10 @@ const createProductSchema = z.object({
   description_en: z.string().trim().max(15000).optional().default(''),
   category: z.string().trim().min(2).max(64).default('enterprise-ai'),
   badge: z.string().trim().max(80).optional().default(''),
+  badge_en: z.string().trim().max(80).optional().default(''),
   image_url: z.string().trim().max(500).optional().default(''),
   features: z.array(z.string().trim().min(1).max(300)).max(20).optional().default([]),
+  features_en: z.array(z.string().trim().min(1).max(300)).max(20).optional().default([]),
   target_sector: z
     .enum(['enterprise', 'government', 'industrial', 'infrastructure'])
     .default('enterprise'),

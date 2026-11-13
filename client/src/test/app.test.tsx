@@ -7,6 +7,8 @@ import { BannerCarousel } from '../components/home/BannerCarousel';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { AboutPage } from '../pages/AboutPage';
+import { TrainingPage } from '../pages/TrainingPage';
+import { ContactPage } from '../pages/ContactPage';
 import { AdminLayout } from '../pages/admin/AdminLayout';
 import { AdminLoginPage } from '../pages/admin/AdminLoginPage';
 import { RequireRole } from '../components/auth/RouteGuards';
@@ -336,5 +338,118 @@ describe('V.I.R.A Pardazesh Hoomaan Front-End Suite', () => {
     const hideBtn = screen.getByRole('button', { name: 'پنهان کردن رمز عبور' });
     fireEvent.click(hideBtn);
     expect(pwInput.type).toBe('password');
+  });
+
+  it('Navbar displays «مقالات» (without جستارها) and «آموزش» tab, and BannerCarousel animates rotating titles', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <Navbar />
+        <BannerCarousel banners={SAMPLE_BANNERS} />
+      </MemoryRouter>
+    );
+
+    const navLinks = Array.from(container.querySelectorAll('.nav-links a')).map(
+      (el) => el.textContent
+    );
+    expect(navLinks).toContain('مقالات');
+    expect(navLinks).toContain('آموزش');
+    expect(navLinks).not.toContain('مقالات و جستارها');
+
+    // Animated rotating banner title class & directional transition
+    const animatedTitle = container.querySelector('.banner-anim-title');
+    expect(animatedTitle).not.toBeNull();
+    const nextArrow = container.querySelector('.banner-arrow--next')!;
+    fireEvent.click(nextArrow);
+    expect(
+      container.querySelector('.banner-slide-overlay--next .banner-anim-title')
+    ).not.toBeNull();
+  });
+
+  it('TrainingPage toggles syllabus dropdown, activates Register upon selecting حضوری/آنلاین tag, and redirects to ContactPage with disabled submit until info is entered', () => {
+    useSiteStore.setState({
+      hasLoaded: true,
+      courses: [
+        {
+          id: 10,
+          title_fa: 'دوره جامع هوش مصنوعی کاربردی و مهندسی پرامپت',
+          title_en: 'Applied Enterprise AI & Prompt Engineering',
+          summary_fa: 'معرفی دوره عملیاتی ویژه سازمان‌ها',
+          summary_en: 'Hands-on corporate AI program',
+          duration: '۲۴ ساعت',
+          level_fa: 'ویژه کارشناسان و مدیران',
+          syllabus_fa: [
+            'فصل اول: مبانی مدل‌های زبانی بزرگ',
+            'فصل دوم: پیاده‌سازی دستیار هوشمند سازمانی',
+          ],
+          syllabus_en: ['Module 1: LLM Foundations'],
+          is_in_person: true,
+          is_online: true,
+          is_active: true,
+          sort_order: 1,
+          created_at: '',
+          updated_at: '',
+        },
+      ],
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/training']}>
+        <Routes>
+          <Route path="/training" element={<TrainingPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // 1. Syllabus is initially collapsed; clicking course title opens dropdown
+    expect(
+      screen.queryByText('فصل اول: مبانی مدل‌های زبانی بزرگ')
+    ).toBeNull();
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: /دوره جامع هوش مصنوعی کاربردی و مهندسی پرامپت/i,
+      })
+    );
+    expect(
+      screen.getByText('فصل اول: مبانی مدل‌های زبانی بزرگ')
+    ).toBeInTheDocument();
+
+    // 2. Register button is initially disabled until حضوری or آنلاین tag is selected
+    const registerBtn = screen.getByRole('button', { name: /ثبت‌نام در دوره/i });
+    expect(registerBtn).toBeDisabled();
+
+    // 3. Selecting آنلاین tag enables Register button
+    const onlineTag = screen.getByRole('button', { name: 'آنلاین' });
+    fireEvent.click(onlineTag);
+    expect(onlineTag).toHaveAttribute('aria-pressed', 'true');
+    expect(registerBtn).not.toBeDisabled();
+
+    // 4. Clicking Register redirects to /contact with prefilled subject & message, while Submit remains disabled until user fills info
+    fireEvent.click(registerBtn);
+
+    const subjectInput = document.getElementById('subject') as HTMLInputElement;
+    const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+    expect(subjectInput.value).toContain('آنلاین');
+    expect(messageInput.value).toContain(
+      'دوره جامع هوش مصنوعی کاربردی و مهندسی پرامپت'
+    );
+
+    const submitBtn = screen.getByRole('button', {
+      name: /ارسال درخواست مشاوره/i,
+    });
+    expect(submitBtn).toBeDisabled();
+
+    // 5. Entering full_name, email, and phone activates the Submit button
+    fireEvent.change(document.getElementById('full_name')!, {
+      target: { value: 'هومان امیری' },
+    });
+    fireEvent.change(document.getElementById('email')!, {
+      target: { value: 'houman@vphlabs.com' },
+    });
+    fireEvent.change(document.getElementById('phone')!, {
+      target: { value: '۰۹۱۲۵۷۶۲۲۹۶' },
+    });
+
+    expect(submitBtn).not.toBeDisabled();
   });
 });

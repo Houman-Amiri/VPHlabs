@@ -51,6 +51,7 @@ export function Navbar() {
     { to: '/', label: t('nav.home'), end: true },
     { to: '/products', label: t('nav.products') },
     { to: '/services', label: t('nav.services') },
+    { to: '/training', label: t('nav.training') },
     { to: '/articles', label: t('nav.articles') },
     { to: '/about', label: t('nav.about') },
     { to: '/contact', label: t('nav.contact') },

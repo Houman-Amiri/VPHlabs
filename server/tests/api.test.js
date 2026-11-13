@@ -32,7 +32,7 @@ let viewerToken;
 
 test.before(() => {
   const mig = runMigrations();
-  assert.equal(mig.total, 4);
+  assert.equal(mig.total, 5);
   seedDatabase();
   app = createApp();
 
@@ -83,7 +83,7 @@ test('Architecture Guardrail: Controllers never import db.js or better-sqlite3 d
 test('Migration Runner: Idempotent re-run applies 0 duplicate migrations', () => {
   const secondRun = runMigrations();
   assert.equal(secondRun.applied.length, 0);
-  assert.equal(secondRun.total, 4);
+  assert.equal(secondRun.total, 5);
 });
 
 test('Seed Admin Sync: Re-syncs stale persistent-disk admin username & password on startup', () => {
@@ -131,18 +131,19 @@ test('GET /api/health returns database connection & applied migrations status', 
   assert.equal(res.body.success, true);
   assert.equal(res.body.data.status, 'ok');
   assert.equal(res.body.data.database, 'connected');
-  assert.equal(res.body.data.migrationsCount, 4);
+  assert.equal(res.body.data.migrationsCount, 5);
   assert.equal(res.body.data.adminReady, true);
-  assert.equal(res.body.data.build, '2026.10.28-r6');
+  assert.equal(res.body.data.build, '2026.10.28-r7');
 });
 
-test('GET /api/content/bootstrap returns charter services, charter banners, team members & updated contact info', async () => {
+test('GET /api/content/bootstrap returns charter services, charter banners, team members, courses & updated contact info', async () => {
   const res = await request(app).get('/api/content/bootstrap').expect(200);
   assert.equal(res.body.success, true);
   assert.equal(res.body.data.banners.length, 3);
   assert.ok(res.body.data.banners[0].title_fa.length > 10);
   assert.equal(res.body.data.services.length, 12);
   assert.equal(res.body.data.teamMembers.length, 3);
+  assert.ok(res.body.data.courses.length >= 1);
   assert.equal(res.body.data.contents['company.reg_number'].en, '3545');
   assert.equal(res.body.data.contents['company.national_id'], undefined);
   assert.equal(res.body.data.contents['company.mechanized_no'], undefined);
@@ -312,12 +313,79 @@ test('RBAC: requireAuth (401) and requireRole("admin") (403) protect CMS mutatio
   const updatedRes = await request(app)
     .put(`/api/products/${createdId}`)
     .set('Authorization', `Bearer ${adminToken}`)
-    .send({ badge: 'جدید' })
+    .send({
+      badge: 'جدید',
+      badge_en: 'New Release',
+      features_en: ['Speaker Diarization', 'Air-Gapped Deployment'],
+    })
     .expect(200);
   assert.equal(updatedRes.body.data.badge, 'جدید');
+  assert.equal(updatedRes.body.data.badge_en, 'New Release');
+  assert.deepEqual(updatedRes.body.data.features_en, [
+    'Speaker Diarization',
+    'Air-Gapped Deployment',
+  ]);
 
   await request(app)
     .delete(`/api/products/${createdId}`)
+    .set('Authorization', `Bearer ${adminToken}`)
+    .expect(200);
+});
+
+test('Training Courses CRUD + Modality Tags + Training Contact Inquiry', async () => {
+  // 1. Seeded sample course exists in public list & bootstrap
+  const listRes = await request(app).get('/api/courses').expect(200);
+  assert.ok(listRes.body.data.length >= 1);
+  assert.equal(listRes.body.data[0].is_in_person, true);
+  assert.equal(listRes.body.data[0].is_online, true);
+  assert.ok(Array.isArray(listRes.body.data[0].syllabus_fa));
+  assert.ok(listRes.body.data[0].syllabus_fa.length >= 1);
+
+  // 2. Admin creates a course with Online-only checkbox
+  const createdCourse = await request(app)
+    .post('/api/courses')
+    .set('Authorization', `Bearer ${adminToken}`)
+    .send({
+      title_fa: 'کارگاه امنیت هوش مصنوعی و حاکمیت داده',
+      title_en: 'AI Security & Data Governance Workshop',
+      syllabus_fa: ['فصل اول: تهدیدات پرامپت اینجکشن', 'فصل دوم: ممیزی مدل‌های زبانی'],
+      is_in_person: false,
+      is_online: true,
+    })
+    .expect(201);
+
+  const courseId = createdCourse.body.data.id;
+  assert.equal(createdCourse.body.data.is_in_person, false);
+  assert.equal(createdCourse.body.data.is_online, true);
+
+  // 3. Rejects creating a course when NEITHER حضوری nor آنلاین is checked
+  await request(app)
+    .post('/api/courses')
+    .set('Authorization', `Bearer ${adminToken}`)
+    .send({
+      title_fa: 'دوره بدون تگ برگزاری',
+      syllabus_fa: ['سرفصل آزمایشی'],
+      is_in_person: false,
+      is_online: false,
+    })
+    .expect(400);
+
+  // 4. Contact inquiry supports department='training'
+  await request(app)
+    .post('/api/contacts')
+    .send({
+      full_name: 'مهندس سارا رضایی',
+      email: 'sara@company.ir',
+      phone: '۰۹۱۲۵۷۶۲۲۹۶',
+      department: 'training',
+      subject: 'درخواست ثبت‌نام دوره آموزشی (آنلاین)',
+      message: 'با سلام، متقاضی ثبت‌نام در دوره امنیت هوش مصنوعی به صورت آنلاین هستم.',
+    })
+    .expect(201);
+
+  // 5. Admin deletes created course
+  await request(app)
+    .delete(`/api/courses/${courseId}`)
     .set('Authorization', `Bearer ${adminToken}`)
     .expect(200);
 });
