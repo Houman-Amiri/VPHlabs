@@ -34,6 +34,7 @@ export const contactFormSchema = z.object({
     'custom-software',
     'industrial-automation',
     'network-infrastructure',
+    'training',
     'support',
   ]),
   product_id: z.number().int().positive().nullable().optional(),
@@ -75,8 +76,10 @@ export const productFormSchema = z.object({
   description_en: z.string().trim().optional().default(''),
   category: z.string().trim().min(2),
   badge: z.string().trim().optional().default(''),
+  badge_en: z.string().trim().optional().default(''),
   image_url: z.string().trim().optional().default(''),
   features_text: z.string().optional().default(''),
+  features_en_text: z.string().optional().default(''),
   target_sector: z.enum([
     'enterprise',
     'government',
@@ -162,3 +165,28 @@ export const teamMemberFormSchema = z.object({
 });
 
 export type TeamMemberFormValues = z.input<typeof teamMemberFormSchema>;
+
+export const courseFormSchema = z
+  .object({
+    title_fa: z.string().trim().min(2, 'عنوان فارسی دوره آموزشی الزامی است.'),
+    title_en: z.string().trim().optional().default(''),
+    summary_fa: z.string().trim().optional().default(''),
+    summary_en: z.string().trim().optional().default(''),
+    duration: z.string().trim().optional().default(''),
+    level_fa: z.string().trim().optional().default(''),
+    syllabus_fa_text: z
+      .string()
+      .trim()
+      .min(3, 'لطفاً حداقل یک سرفصل آموزشی (هر خط یک سرفصل) وارد کنید.'),
+    syllabus_en_text: z.string().optional().default(''),
+    is_in_person: z.boolean().default(true),
+    is_online: z.boolean().default(true),
+    is_active: z.boolean().default(true),
+    sort_order: z.coerce.number().int().min(0).default(0),
+  })
+  .refine((val) => val.is_in_person || val.is_online, {
+    message: 'حداقل یکی از دو گزینه «حضوری» یا «آنلاین» باید تیک بخورد.',
+    path: ['is_in_person'],
+  });
+
+export type CourseFormValues = z.input<typeof courseFormSchema>;

@@ -35,8 +35,10 @@ export function AdminProductsPage() {
       description_en: '',
       category: 'enterprise-ai',
       badge: '',
+      badge_en: '',
       image_url: '/banners/banner-1.jpg',
       features_text: '',
+      features_en_text: '',
       target_sector: 'enterprise',
       isic_code: '620101',
       demo_available: true,
@@ -81,8 +83,10 @@ export function AdminProductsPage() {
       description_en: '',
       category: 'enterprise-ai',
       badge: '',
+      badge_en: '',
       image_url: '/banners/banner-1.jpg',
       features_text: '',
+      features_en_text: '',
       target_sector: 'enterprise',
       isic_code: '620101',
       demo_available: true,
@@ -98,15 +102,17 @@ export function AdminProductsPage() {
     reset({
       slug: item.slug,
       title_fa: item.title_fa,
-      title_en: item.title_en,
+      title_en: item.title_en || '',
       summary_fa: item.summary_fa,
-      summary_en: item.summary_en,
+      summary_en: item.summary_en || '',
       description_fa: item.description_fa,
-      description_en: item.description_en,
+      description_en: item.description_en || '',
       category: item.category,
-      badge: item.badge,
+      badge: item.badge || '',
+      badge_en: item.badge_en || '',
       image_url: item.image_url,
-      features_text: item.features.join('\n'),
+      features_text: (item.features || []).join('\n'),
+      features_en_text: (item.features_en || []).join('\n'),
       target_sector: item.target_sector,
       isic_code: item.isic_code,
       demo_available: item.demo_available,
@@ -122,10 +128,15 @@ export function AdminProductsPage() {
       .split('\n')
       .map((s) => s.trim())
       .filter(Boolean);
+    const features_en = (values.features_en_text || '')
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
 
     const payload = {
       ...values,
       features,
+      features_en,
     };
 
     try {
@@ -207,6 +218,18 @@ export function AdminProductsPage() {
               </div>
 
               <div className="form-group">
+                <label className="form-label">عنوان انگلیسی محصول (Title EN)</label>
+                <input
+                  dir="ltr"
+                  className="form-input"
+                  placeholder="e.g. VIRA DocMind AI — Enterprise RAG"
+                  {...register('title_en')}
+                />
+              </div>
+            </div>
+
+            <div className="grid-3">
+              <div className="form-group">
                 <label className="form-label">اسلاگ یکتا (URL Slug) *</label>
                 <input
                   dir="ltr"
@@ -218,20 +241,23 @@ export function AdminProductsPage() {
                   <span className="form-error">{errors.slug.message}</span>
                 )}
               </div>
-            </div>
-
-            <div className="grid-2">
-              <div className="form-group">
-                <label className="form-label">عنوان انگلیسی (اختیاری)</label>
-                <input dir="ltr" className="form-input" {...register('title_en')} />
-              </div>
 
               <div className="form-group">
-                <label className="form-label">نشان برجسته (Badge)</label>
+                <label className="form-label">نشان برجسته فارسی (Badge FA)</label>
                 <input
                   className="form-input"
                   placeholder="مثلاً: پرفروش سازمانی"
                   {...register('badge')}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">نشان برجسته انگلیسی (Badge EN)</label>
+                <input
+                  dir="ltr"
+                  className="form-input"
+                  placeholder="e.g. Enterprise Bestseller"
+                  {...register('badge_en')}
                 />
               </div>
             </div>
@@ -269,36 +295,87 @@ export function AdminProductsPage() {
               onChange={(url) => setValue('image_url', url)}
             />
 
-            <div className="form-group">
-              <label className="form-label">خلاصه معرفی فارسی *</label>
-              <textarea rows={2} className="form-textarea" {...register('summary_fa')} />
-              {errors.summary_fa && (
-                <span className="form-error">{errors.summary_fa.message}</span>
-              )}
+            <div className="grid-2">
+              <div className="form-group">
+                <label className="form-label">خلاصه معرفی فارسی *</label>
+                <textarea
+                  rows={3}
+                  className="form-textarea"
+                  {...register('summary_fa')}
+                />
+                {errors.summary_fa && (
+                  <span className="form-error">{errors.summary_fa.message}</span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">
+                  خلاصه معرفی انگلیسی (Summary EN)
+                </label>
+                <textarea
+                  dir="ltr"
+                  rows={3}
+                  className="form-textarea"
+                  placeholder="Concise English product summary..."
+                  {...register('summary_en')}
+                />
+              </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">توضیحات فنی کامل فارسی *</label>
-              <textarea
-                rows={5}
-                className="form-textarea"
-                {...register('description_fa')}
-              />
-              {errors.description_fa && (
-                <span className="form-error">{errors.description_fa.message}</span>
-              )}
+            <div className="grid-2">
+              <div className="form-group">
+                <label className="form-label">توضیحات فنی کامل فارسی *</label>
+                <textarea
+                  rows={5}
+                  className="form-textarea"
+                  {...register('description_fa')}
+                />
+                {errors.description_fa && (
+                  <span className="form-error">
+                    {errors.description_fa.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">
+                  توضیحات فنی کامل انگلیسی (Description EN)
+                </label>
+                <textarea
+                  dir="ltr"
+                  rows={5}
+                  className="form-textarea"
+                  placeholder="Full technical overview & architecture in English..."
+                  {...register('description_en')}
+                />
+              </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">
-                ویژگی‌های کلیدی (هر خط یک ویژگی)
-              </label>
-              <textarea
-                rows={4}
-                className="form-textarea"
-                placeholder="استقرار بومی بدون اینترنت خارجی&#10;کنترل دسترسی نقش‌محور"
-                {...register('features_text')}
-              />
+            <div className="grid-2">
+              <div className="form-group">
+                <label className="form-label">
+                  ویژگی‌های کلیدی فارسی (هر خط یک ویژگی)
+                </label>
+                <textarea
+                  rows={4}
+                  className="form-textarea"
+                  placeholder="استقرار بومی بدون اینترنت خارجی&#10;کنترل دسترسی نقش‌محور"
+                  {...register('features_text')}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">
+                  ویژگی‌های کلیدی انگلیسی (Features EN — هر خط یک ویژگی)
+                </label>
+                <textarea
+                  dir="ltr"
+                  rows={4}
+                  className="form-textarea"
+                  placeholder="100% air-gapped on-premise deployment&#10;Role-Based Access Control (RBAC)"
+                  {...register('features_en_text')}
+                />
+              </div>
             </div>
 
             <div

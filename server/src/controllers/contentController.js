@@ -2,18 +2,20 @@ const contentRepository = require('../repositories/contentRepository');
 const bannerRepository = require('../repositories/bannerRepository');
 const serviceRepository = require('../repositories/serviceRepository');
 const teamRepository = require('../repositories/teamRepository');
+const courseRepository = require('../repositories/courseRepository');
 const { asyncHandler } = require('../middlewares/errorHandler');
 
 const contentController = {
   /**
    * Public site bootstrap endpoint returning dynamic CMS texts, active banners,
-   * charter services, and active team members (همکاران).
+   * charter services, active team members (همکاران), and active training courses (آموزش).
    */
   getPublicSiteData: asyncHandler(async (_req, res) => {
     const contents = contentRepository.findAsMap();
     const banners = bannerRepository.findAll({ activeOnly: true });
     const services = serviceRepository.findAll({ activeOnly: true });
     const teamMembers = teamRepository.findAll({ activeOnly: true });
+    const courses = courseRepository.findAll({ activeOnly: true });
 
     res.status(200).json({
       success: true,
@@ -22,6 +24,7 @@ const contentController = {
         banners,
         services,
         teamMembers,
+        courses,
       },
     });
   }),

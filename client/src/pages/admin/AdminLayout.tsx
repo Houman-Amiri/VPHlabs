@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   FileText,
+  GraduationCap,
   Image,
   Inbox,
   LayoutDashboard,
@@ -36,7 +37,8 @@ export function AdminLayout() {
   const links = [
     { to: '/admin', label: 'پیشخوان مدیریت', icon: LayoutDashboard, end: true },
     { to: '/admin/products', label: 'محصولات هوشمند', icon: Package },
-    { to: '/admin/articles', label: 'مقالات و جستارها (سئو)', icon: FileText },
+    { to: '/admin/training', label: 'دوره‌های آموزشی (صفحه آموزش)', icon: GraduationCap },
+    { to: '/admin/articles', label: 'مقالات (سئو)', icon: FileText },
     { to: '/admin/banners', label: 'بنرهای اسلایدر صفحه اصلی', icon: Image },
     { to: '/admin/team', label: 'معرفی همکاران (درباره ما)', icon: Users },
     { to: '/admin/content', label: 'متن صفحات و خدمات اساسنامه', icon: Sliders },

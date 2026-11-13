@@ -79,6 +79,15 @@
 | **`PUT`** | `/api/team/:id` | Admin (`requireAuth` + `requireRole("admin")`) | Update colleague details, photo, or social links. <br/>**Body:** `Partial team member fields` |
 | **`DELETE`** | `/api/team/:id` | Admin (`requireAuth` + `requireRole("admin")`) | Remove a colleague entry. |
 
+## Training Courses (آموزش)
+
+| Method | Endpoint | Access / Guards | Details |
+| :--- | :--- | :--- | :--- |
+| **`GET`** | `/api/courses` | Public (`?all=true` unlocked for Admin) | Lists training courses with syllabus items and in-person/online tags. |
+| **`POST`** | `/api/courses` | Admin (`requireAuth` + `requireRole("admin")`) | Creates a new training course with syllabus and delivery mode tags. |
+| **`PUT`** | `/api/courses/:id` | Admin (`requireAuth` + `requireRole("admin")`) | Updates an existing training course. |
+| **`DELETE`** | `/api/courses/:id` | Admin (`requireAuth` + `requireRole("admin")`) | Deletes a training course by ID. |
+
 ## Dynamic Page Texts CMS
 
 | Method | Endpoint | Access / Guards | Details |
@@ -118,4 +127,4 @@
 | **`GET`** | `/robots.txt` | Public | Search crawler directives pointing to `/sitemap.xml` and disallowing `/admin`. |
 
 ---
-*Total verified Express endpoints: **42**.*
+*Total verified Express endpoints: **46**.*

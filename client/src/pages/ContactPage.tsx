@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Clock,
   Copy,
+  GraduationCap,
   Mail,
   MapPin,
   Phone,
@@ -35,6 +36,8 @@ export function ContactPage() {
     ? Number(searchParams.get('product_id'))
     : null;
   const initialSubject = searchParams.get('subject') || '';
+  const initialMessage = searchParams.get('message') || '';
+  const isFromTraining = searchParams.get('from') === 'training';
   const initialDept = (searchParams.get('department') ||
     'ai-consulting') as ContactFormValues['department'];
 
@@ -42,6 +45,8 @@ export function ContactPage() {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -53,9 +58,42 @@ export function ContactPage() {
       department: initialDept,
       product_id: initialProductId,
       subject: initialSubject,
-      message: '',
+      message: initialMessage,
     },
   });
+
+  useEffect(() => {
+    const subj = searchParams.get('subject');
+    const msg = searchParams.get('message');
+    const dept = searchParams.get('department') as
+      | ContactFormValues['department']
+      | null;
+    const prodId = searchParams.get('product_id');
+
+    if (subj) setValue('subject', subj);
+    if (msg) setValue('message', msg);
+    if (dept) setValue('department', dept);
+    if (prodId) setValue('product_id', Number(prodId));
+  }, [searchParams, setValue]);
+
+  const watchedFullName = watch('full_name') || '';
+  const watchedEmail = watch('email') || '';
+  const watchedPhone = watch('phone') || '';
+  const watchedSubject = watch('subject') || '';
+  const watchedMessage = watch('message') || '';
+
+  const normalizedPhoneDigits = String(watchedPhone)
+    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 1776))
+    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 1632))
+    .replace(/[\s()-]/g, '');
+
+  const isFormReady =
+    watchedFullName.trim().length >= 2 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchedEmail.trim()) &&
+    (/^(\+98|0098|0)?9\d{9}$/.test(normalizedPhoneDigits) ||
+      /^0\d{9,10}$/.test(normalizedPhoneDigits)) &&
+    watchedSubject.trim().length >= 3 &&
+    watchedMessage.trim().length >= 10;
 
   async function onSubmit(values: ContactFormValues) {
     setSubmitError(null);
@@ -200,6 +238,37 @@ export function ContactPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              {isFromTraining && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.65rem',
+                    padding: '0.85rem 1rem',
+                    marginBottom: '1.1rem',
+                    borderRadius: '0.7rem',
+                    background: 'var(--bg-subtle)',
+                    border: '1px solid var(--border-strong)',
+                    fontSize: '0.88rem',
+                    color: 'var(--text-primary)',
+                  }}
+                >
+                  <GraduationCap
+                    size={19}
+                    style={{
+                      color: 'var(--accent-primary)',
+                      flexShrink: 0,
+                      marginTop: '0.15rem',
+                    }}
+                  />
+                  <span>
+                    {isFa
+                      ? 'متن درخواست ثبت‌نام دوره برای شما آماده شده است؛ لطفاً نام، پست الکترونیک و شماره تماس خود را وارد کنید تا گزینه ارسال فعال شود.'
+                      : 'Your course registration request has been pre-filled. Please enter your name, email, and phone number to activate the submit button.'}
+                  </span>
+                </div>
+              )}
+
               {submitError && (
                 <div
                   role="alert"
@@ -320,6 +389,11 @@ export function ContactPage() {
                         ? 'شبکه داده و زیرساخت مراکز پردازش'
                         : 'Network & Data Center Ops'}
                     </option>
+                    <option value="training">
+                      {isFa
+                        ? 'واحد آموزش و ثبت‌نام دوره‌های تخصصی'
+                        : 'Training & Executive Courses'}
+                    </option>
                     <option value="support">
                       {isFa
                         ? 'پشتیبانی فنی و امور قراردادها'
@@ -372,7 +446,7 @@ export function ContactPage() {
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isFormReady}
                 style={{ width: '100%' }}
               >
                 <Send size={16} />

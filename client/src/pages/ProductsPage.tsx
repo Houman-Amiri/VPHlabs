@@ -210,8 +210,12 @@ export function ProductsPage() {
                         marginBottom: '0.75rem',
                       }}
                     >
-                      {product.badge ? (
-                        <span className="badge">{product.badge}</span>
+                      {(isFa ? product.badge : product.badge_en || product.badge) ? (
+                        <span className="badge">
+                          {isFa
+                            ? product.badge
+                            : product.badge_en || product.badge}
+                        </span>
                       ) : (
                         <span />
                       )}

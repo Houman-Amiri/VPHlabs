@@ -15,6 +15,7 @@ const PAGE_SECTIONS = [
   { key: 'home', label: 'صفحه اصلی (H1 و بخش‌ها)' },
   { key: 'products', label: 'صفحه محصولات (H1 و توضیحات)' },
   { key: 'services', label: 'صفحه خدمات (H1 و توضیحات)' },
+  { key: 'training', label: 'صفحه آموزش (H1 و توضیحات)' },
   { key: 'articles', label: 'صفحه مقالات (H1 و توضیحات)' },
   { key: 'about', label: 'صفحه درباره ما (H1 و بخش‌ها)' },
   { key: 'contact', label: 'صفحه تماس و مشاوره (H1 و نشانی)' },

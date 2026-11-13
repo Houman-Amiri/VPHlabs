@@ -116,6 +116,7 @@ export function Footer() {
               <Link to="/">{t('nav.home')}</Link>
               <Link to="/products">{t('nav.products')}</Link>
               <Link to="/services">{t('nav.services')}</Link>
+              <Link to="/training">{t('nav.training')}</Link>
               <Link to="/articles">{t('nav.articles')}</Link>
               <Link to="/about">{t('nav.about')}</Link>
               <Link to="/contact">{t('nav.contact')}</Link>

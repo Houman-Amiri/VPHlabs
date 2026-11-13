@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   Database,
   FileText,
+  GraduationCap,
   Image,
   Inbox,
   Package,
@@ -21,6 +22,7 @@ interface AdminStats {
   bannersCount: number;
   servicesCount: number;
   teamCount?: number;
+  coursesCount?: number;
   messages: ContactStatusCounts;
   system: {
     uptimeSeconds: number;
@@ -139,6 +141,20 @@ export function AdminDashboardPage() {
               </div>
             </div>
             <Users size={28} style={{ color: 'var(--accent-primary)' }} />
+          </div>
+        </Link>
+
+        <Link to="/admin/training" className="card card-interactive">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
+                دوره‌ها و عناوین آموزشی (آموزش)
+              </div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent-primary)' }}>
+                {formatLocaleNumber(stats.coursesCount ?? 0)}
+              </div>
+            </div>
+            <GraduationCap size={28} style={{ color: 'var(--accent-primary)' }} />
           </div>
         </Link>
 

@@ -6,6 +6,7 @@ const userRepository = require('../repositories/userRepository');
 const bannerRepository = require('../repositories/bannerRepository');
 const serviceRepository = require('../repositories/serviceRepository');
 const teamRepository = require('../repositories/teamRepository');
+const courseRepository = require('../repositories/courseRepository');
 const productRepository = require('../repositories/productRepository');
 const articleRepository = require('../repositories/articleRepository');
 const contentRepository = require('../repositories/contentRepository');
@@ -286,6 +287,7 @@ const INITIAL_PRODUCTS = [
     description_en: `VIRA DocMind AI enables Iranian enterprises and public sector institutions to unlock institutional knowledge across millions of Persian PDFs, scanned letters, bylaws, and contracts. Powered by air-gapped on-premise Retrieval-Augmented Generation (RAG), every answer cites the exact clause and source document while keeping 100% of sensitive data inside your corporate network.`,
     category: 'enterprise-ai',
     badge: 'پرفروش سازمانی',
+    badge_en: 'Enterprise Bestseller',
     image_url: '/banners/banner-1.jpg',
     features: [
       'استقرار کاملاً بومی (On-Premise) بدون نیاز به اینترنت خارجی',
@@ -293,6 +295,13 @@ const INITIAL_PRODUCTS = [
       'پاسخگویی مستند با ذکر دقیق منبع، شماره بند و لینک به فایل اصلی',
       'کنترل دسترسی مبتنی بر نقش (RBAC) هماهنگ با ساختار سازمانی و اکتیودایرکتوری',
       'رابط برنامه‌نویسی (REST API) جهت اتصال به اتوماسیون‌های اداری موجود',
+    ],
+    features_en: [
+      '100% air-gapped on-premise deployment without external internet',
+      'High-accuracy Persian layout-aware OCR for scanned letters & bylaws',
+      'Citation-backed answers referencing exact clause, page & source file',
+      'Role-Based Access Control (RBAC) integrated with Active Directory',
+      'REST API connectors for existing office automation suites',
     ],
     target_sector: 'government',
     isic_code: '620101',
@@ -315,12 +324,19 @@ const INITIAL_PRODUCTS = [
     description_en: `Bridging industrial control engineering with machine learning, VIRA AutoGuard ingests live PLC/SCADA sensor streams to detect subtle vibration, thermal, and electrical anomalies weeks before catastrophic equipment failure.`,
     category: 'industrial-ai',
     badge: 'صنعت هوشمند ۴.۰',
+    badge_en: 'Industry 4.0 AI',
     image_url: '/banners/banner-2.jpg',
     features: [
       'اتصال استاندارد به پروتکل‌های صنعتی Modbus، OPC-UA و MQTT',
       'تشخیص بلادرنگ ناهنجاری در داده‌های سری زمانی سنسورها',
       'داشبورد شماتیک وضعیت سلامت تجهیزات با هشدار پیامکی و سازمانی',
       'پردازش لبه (Edge AI) با تأخیر زیر ۵۰ میلی‌ثانیه در محل کارخانه',
+    ],
+    features_en: [
+      'Native Modbus, OPC-UA & MQTT industrial protocol ingestion',
+      'Real-time time-series anomaly detection across sensor streams',
+      'Schematic equipment health dashboard with SMS & enterprise alerts',
+      'Sub-50ms Edge AI inference directly on the factory floor',
     ],
     target_sector: 'industrial',
     isic_code: '620906',
@@ -341,12 +357,19 @@ const INITIAL_PRODUCTS = [
     description_en: `VIRA DeskYar transforms public service portals and enterprise helpdesks with accurate 24/7 Persian conversational support, smart ticket triage, and instant agent assist.`,
     category: 'enterprise-ai',
     badge: 'میز خدمت هوشمند',
+    badge_en: 'Smart Helpdesk',
     image_url: '/banners/banner-3.jpg',
     features: [
       'درک عمیق محاوره و ادبیات رسمی اداری زبان فارسی',
       'مسیریابی و اولویت‌بندی خودکار تیکت‌ها و شکایات',
       'تحلیل احساسات و سنجش رضایت‌مندی مراجعین در لحظه',
       'امکان استقرار به صورت ویجت وب‌سایت، کیوسک ارباب‌رجوع یا پنل کارشناسان',
+    ],
+    features_en: [
+      'Deep understanding of formal administrative & conversational Persian',
+      'Automated ticket classification, routing & priority scoring',
+      'Real-time citizen/customer sentiment & satisfaction analytics',
+      'Deployable as web widget, on-site kiosk, or agent assist console',
     ],
     target_sector: 'government',
     isic_code: '620102',
@@ -367,11 +390,17 @@ const INITIAL_PRODUCTS = [
     description_en: `Combining network engineering with AIOps machine learning, VIRA NetShield correlates telemetry across switches, routers, and servers to pinpoint bottlenecks before outages occur.`,
     category: 'infrastructure',
     badge: 'پایش هوشمند شبکه',
+    badge_en: 'Smart Network Ops',
     image_url: '/banners/banner-2.jpg',
     features: [
       'همبستگی هوشمند رخدادها و کاهش ۹۰ درصدی هشدارهای کاذب (Alert Fatigue)',
       'پایش مستمر پهنای باند، تأخیر و سلامت سرویس‌های حیاتی',
       'گزارش‌های مدیریتی انطباق با توافق‌نامه سطح خدمات (SLA)',
+    ],
+    features_en: [
+      'Intelligent event correlation cutting alert fatigue by up to 90%',
+      '24/7 bandwidth, latency & critical service health telemetry',
+      'Executive SLA compliance & root-cause reporting',
     ],
     target_sector: 'infrastructure',
     isic_code: '631103',
@@ -392,11 +421,17 @@ const INITIAL_PRODUCTS = [
     description_en: `Ask questions in natural Persian and instantly generate verified SQL analytics, executive KPI charts, and multi-quarter demand forecasts.`,
     category: 'data-analytics',
     badge: 'تصمیم‌یار مدیران',
+    badge_en: 'Executive AI BI',
     image_url: '/banners/banner-3.jpg',
     features: [
       'تبدیل ایمن پرسش‌های فارسی به گزارش‌های تحلیلی و نمودار زنده',
       'مدل‌های پیش‌بینی تقاضا، جریان نقدینگی و مصرف منابع سازمانی',
       'اتصال به پایگاه‌های داده SQL Server، PostgreSQL، Oracle و اکسل',
+    ],
+    features_en: [
+      'Safe natural-language-to-SQL analytics & interactive KPI charts',
+      'Demand, cash-flow & resource consumption forecasting models',
+      'Connectors for SQL Server, PostgreSQL, Oracle & Excel',
     ],
     target_sector: 'enterprise',
     isic_code: '620104',
@@ -417,11 +452,17 @@ const INITIAL_PRODUCTS = [
     description_en: `Unified OpenAI-compatible on-premise gateway with automatic Persian PII masking, token quotas per department, and full audit trails.`,
     category: 'infrastructure',
     badge: 'زیرساخت و امنیت AI',
+    badge_en: 'AI Security & Infra',
     image_url: '/banners/banner-1.jpg',
     features: [
       'ماسک‌گذاری خودکار کد ملی، شماره حساب و اطلاعات محرمانه (PII Filter)',
       'سهمیه‌بندی منابع پردازشی به تفکیک هر واحد سازمانی',
       'ثبت کامل لاگ ممیزی (Audit Log) برای واحدهای حراست فناوری و امنیت اطلاعات',
+    ],
+    features_en: [
+      'Automated redaction of national IDs, account numbers & sensitive PII',
+      'Granular per-department GPU & token quota management',
+      'Immutable audit trail logs for cybersecurity & compliance teams',
     ],
     target_sector: 'infrastructure',
     isic_code: '620103',
@@ -429,6 +470,37 @@ const INITIAL_PRODUCTS = [
     is_featured: false,
     is_published: true,
     sort_order: 6,
+  },
+];
+
+const INITIAL_COURSES = [
+  {
+    title_fa: 'دوره جامع هوش مصنوعی کاربردی، مهندسی پرامپت و استقرار دستیار هوشمند سازمانی (RAG)',
+    title_en: 'Applied Enterprise AI, Prompt Engineering & On-Premise RAG Deployment',
+    summary_fa:
+      'دوره عملیاتی و پروژه‌محور ویژه مدیران، کارشناسان فناوری اطلاعات و تیم‌های تحول دیجیتال جهت تسلط بر ابزارهای هوش مصنوعی، اتوماسیون مکاتبات اداری و پیاده‌سازی امن مدل‌های زبانی در سازمان‌ها.',
+    summary_en:
+      'Hands-on corporate training covering practical Generative AI workflows, prompt engineering, data security governance, and private RAG deployment.',
+    duration: '۲۴ ساعت آموزشی (کارگاهی و پروژه‌محور)',
+    level_fa: 'مقدماتی تا پیشرفته (ویژه سازمان‌ها و متخصصان)',
+    syllabus_fa: [
+      'فصل اول: مبانی مدل‌های زبانی بزرگ (LLM) و شناخت ظرفیت‌های هوش مصنوعی در سازمان‌های ایرانی',
+      'فصل دوم: اصول مهندسی پرامپت حرفه‌ای برای نگارش گزارش‌های مدیریتی، نامه‌های رسمی و تحلیل مستندات',
+      'فصل سوم: معماری سامانه‌های RAG بومی و اتصال امن هوش مصنوعی به آیین‌نامه‌ها و اسناد داخلی بدون خروج داده',
+      'فصل چهارم: ملاحظات امنیت اطلاعات، حریم خصوصی داده‌ها و پیشگیری از خطای توهم (Hallucination) در محیط اداری',
+      'فصل پنجم: کارگاه عملی طراحی و استقرار دستیار هوشمند اختصاصی برای واحدهای سازمانی شرکت‌کنندگان',
+    ],
+    syllabus_en: [
+      'Module 1: Foundations of Large Language Models (LLMs) & Enterprise AI Use Cases',
+      'Module 2: Advanced Prompt Engineering for Executive Reporting & Document Analysis',
+      'Module 3: Private Retrieval-Augmented Generation (RAG) Architecture on Internal Documents',
+      'Module 4: AI Governance, PII Protection & Hallucination Mitigation in Organizations',
+      'Module 5: Capstone Lab — Building & Deploying a Departmental AI Copilot',
+    ],
+    is_in_person: true,
+    is_online: true,
+    is_active: true,
+    sort_order: 1,
   },
 ];
 
@@ -1056,6 +1128,29 @@ const INITIAL_SITE_CONTENTS = [
     value_en: 'Pilot rollout, staff training & SLA-backed support',
   },
   {
+    content_key: 'training.page_badge',
+    section: 'training',
+    label_fa: 'برچسب بالای تیتر صفحه آموزش',
+    value_fa: 'آکادمی تخصصی و توانمندسازی سازمانی • کد آیسیک ۶۲۰۹۰۵',
+    value_en: 'Corporate AI Academy & Applied Training • ISIC 620905',
+  },
+  {
+    content_key: 'training.page_title',
+    section: 'training',
+    label_fa: 'تیتر اصلی H1 صفحه آموزش',
+    value_fa: 'دوره‌های آموزشی تخصصی هوش مصنوعی و فناوری اطلاعات',
+    value_en: 'Specialized AI & Enterprise IT Training Courses',
+  },
+  {
+    content_key: 'training.page_subtitle',
+    section: 'training',
+    label_fa: 'توضیحات زیر تیتر اصلی صفحه آموزش',
+    value_fa:
+      'توانمندسازی عملی مدیران، کارشناسان و تیم‌های فنی سازمان‌ها و شرکت‌ها با دوره‌های کاربردی حضوری و آنلاین شرکت ویرا پردازش هومان؛ برای مشاهده سرفصل‌ها روی عنوان دوره کلیک کنید و جهت ثبت‌نام نوع برگزاری (حضوری یا آنلاین) را انتخاب نمایید.',
+    value_en:
+      'Hands-on corporate and technical training programs by V.I.R.A Pardazesh Hoomaan. Click any course title to inspect its syllabus, then select an In-Person or Online tag to proceed with registration.',
+  },
+  {
     content_key: 'footer.copyright',
     section: 'company',
     label_fa: 'متن کپی‌رایت فوتر',
@@ -1138,6 +1233,13 @@ function seedDatabase() {
       teamRepository.create(member);
     }
     logger.info({ count: INITIAL_TEAM_MEMBERS.length }, 'Seeded initial team members');
+  }
+
+  if (courseRepository.countAll() === 0) {
+    for (const course of INITIAL_COURSES) {
+      courseRepository.create(course);
+    }
+    logger.info({ count: INITIAL_COURSES.length }, 'Seeded initial training courses');
   }
 
   if (productRepository.countAll() === 0) {

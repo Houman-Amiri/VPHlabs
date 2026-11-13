@@ -45,13 +45,33 @@ export interface Product {
   description_en: string;
   category: string;
   badge: string;
+  badge_en: string;
   image_url: string;
   features: string[];
+  features_en: string[];
   target_sector: 'enterprise' | 'government' | 'industrial' | 'infrastructure';
   isic_code: string;
   demo_available: boolean;
   is_featured: boolean;
   is_published: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseItem {
+  id: number;
+  title_fa: string;
+  title_en: string;
+  summary_fa: string;
+  summary_en: string;
+  duration: string;
+  level_fa: string;
+  syllabus_fa: string[];
+  syllabus_en: string[];
+  is_in_person: boolean;
+  is_online: boolean;
+  is_active: boolean;
   sort_order: number;
   created_at: string;
   updated_at: string;
