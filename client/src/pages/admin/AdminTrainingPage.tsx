@@ -266,7 +266,7 @@ export function AdminTrainingPage() {
                 style={{
                   display: 'flex',
                   flexWrap: 'wrap',
-                  gap: '1.5rem',
+                  gap: '0.75rem 1.25rem',
                 }}
               >
                 <label

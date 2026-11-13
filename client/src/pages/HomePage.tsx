@@ -154,10 +154,10 @@ export function HomePage() {
 
           <h1
             style={{
-              margin: '0 0 1rem',
-              fontSize: 'clamp(1.5rem, 3.4vw, 2.65rem)',
+              margin: '0 0 0.85rem',
+              fontSize: 'clamp(1.26rem, 3.4vw, 2.55rem)',
               fontWeight: 800,
-              lineHeight: 1.38,
+              lineHeight: 1.4,
             }}
           >
             {missionTitle}
@@ -165,9 +165,9 @@ export function HomePage() {
 
           <p
             style={{
-              margin: '0 0 1.65rem',
+              margin: '0 0 1.5rem',
               color: 'var(--text-secondary)',
-              fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
+              fontSize: 'clamp(0.88rem, 1.4vw, 1.04rem)',
               maxWidth: '880px',
             }}
           >

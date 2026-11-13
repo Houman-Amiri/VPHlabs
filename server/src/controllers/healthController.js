@@ -19,7 +19,7 @@ const healthController = {
       data: {
         status: 'ok',
         service: 'V.I.R.A Pardazesh Hoomaan API',
-        build: '2026.10.28-r7',
+        build: '2026.10.28-r8',
         adminReady: Boolean(adminRow && adminRow.is_active && adminRow.role === 'admin'),
         timestamp: new Date().toISOString(),
         uptimeSeconds: Math.round(process.uptime()),

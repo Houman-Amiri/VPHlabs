@@ -114,15 +114,15 @@ export function ProductDetailPage() {
               </span>
             </div>
 
-            <h1 style={{ margin: '0 0 1rem', fontSize: 'clamp(1.45rem, 3vw, 2.2rem)', lineHeight: 1.38 }}>
+            <h1 style={{ margin: '0 0 0.85rem', fontSize: 'clamp(1.26rem, 3vw, 2.15rem)', lineHeight: 1.4 }}>
               {title}
             </h1>
 
             <p
               style={{
-                fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)',
+                fontSize: 'clamp(0.88rem, 1.4vw, 1.04rem)',
                 color: 'var(--text-secondary)',
-                margin: '0 0 1.5rem',
+                margin: '0 0 1.35rem',
               }}
             >
               {summary}

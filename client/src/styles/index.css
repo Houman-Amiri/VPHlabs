@@ -222,17 +222,17 @@ textarea {
 
 .page-title {
   margin: 0 0 0.75rem;
-  font-size: clamp(1.55rem, 3.2vw, 2.5rem);
+  font-size: clamp(1.26rem, 3.2vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.015em;
-  line-height: 1.35;
+  line-height: 1.38;
 }
 
 .page-subtitle {
   margin: 0;
   max-width: 780px;
   color: var(--text-secondary);
-  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  font-size: clamp(0.88rem, 1.4vw, 1.05rem);
 }
 
 .section-head {
@@ -867,6 +867,8 @@ html[dir='ltr'] .banner-arrow--next {
   font-size: 0.78rem;
   font-weight: 600;
   line-height: 1.45;
+  white-space: normal;
+  text-align: start;
   background: var(--bg-subtle);
   color: var(--accent-primary);
   border: 1px solid var(--border-strong);
@@ -1199,7 +1201,8 @@ html[dir='ltr'] .banner-arrow--next {
 }
 
 .training-title-trigger {
-  flex: 1 1 320px;
+  flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
   display: flex;
   align-items: center;
@@ -1624,23 +1627,46 @@ html[dir='ltr'] .banner-arrow--next {
   }
 }
 
-/* Mobile Inputs (prevent iOS Safari zoom on tap) & Card Table Transform */
+/* Mobile Typography Scale, Header Logo-Only, Inputs & Card Table Transform */
 @media (max-width: 768px) {
+  html {
+    font-size: 14.5px;
+  }
+
+  body {
+    line-height: 1.68;
+  }
+
+  /* Show ONLY the logo in mobile header so brand text is never clipped/hidden */
+  .brand-link {
+    flex: 0 0 auto;
+    gap: 0;
+  }
+
+  .brand-text-wrap {
+    display: none;
+  }
+
+  .brand-logo-img {
+    height: 2rem;
+  }
+
+  /* Keep inputs at exact 16px so iOS Safari never auto-zooms on focus */
   .form-input,
   .form-select,
   .form-textarea {
-    font-size: 1rem;
-    min-height: 2.75rem;
+    font-size: 16px;
+    min-height: 2.65rem;
   }
 
   .hero-card,
   .section-card,
   .auth-card {
-    padding: 1.5rem;
+    padding: 1.35rem;
   }
 
   .detail-grid {
-    gap: 1.5rem;
+    gap: 1.35rem;
   }
 
   /* Responsive stacked cards for admin tables */
@@ -1730,24 +1756,16 @@ html[dir='ltr'] .banner-arrow--next {
   }
 
   .navbar-inner {
-    min-height: 4rem;
+    min-height: 3.85rem;
     gap: 0.5rem;
   }
 
-  .brand-link {
-    gap: 0.55rem;
-  }
-
   .brand-logo-box {
-    padding: 0.22rem 0.45rem;
+    padding: 0.22rem 0.48rem;
   }
 
   .brand-logo-img {
-    height: 1.8rem;
-  }
-
-  .brand-title {
-    font-size: 0.9rem;
+    height: 1.92rem;
   }
 
   .nav-actions {
@@ -1755,14 +1773,41 @@ html[dir='ltr'] .banner-arrow--next {
   }
 
   .nav-actions .icon-btn {
-    min-height: 2.3rem;
-    min-width: 2.3rem;
-    padding-inline: 0.5rem;
+    min-height: 2.25rem;
+    min-width: 2.25rem;
+    padding-inline: 0.52rem;
+    font-size: 0.8rem;
+  }
+
+  .mobile-drawer .nav-item {
+    min-height: 2.55rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    min-height: 2.45rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.88rem;
+  }
+
+  .badge {
+    font-size: 0.74rem;
+    padding: 0.22rem 0.62rem;
+    border-radius: 0.65rem;
+  }
+
+  .stat-box {
+    padding: 0.9rem 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.32rem;
   }
 
   /* Zero-clipping mobile Banner Carousel with bottom-corner navigation */
   .banner-carousel-wrapper {
-    padding-top: 1rem;
+    padding-top: 0.85rem;
   }
 
   .banner-carousel {
@@ -1775,7 +1820,7 @@ html[dir='ltr'] .banner-arrow--next {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    min-height: 280px;
+    min-height: 248px;
   }
 
   .banner-slide-img {
@@ -1791,9 +1836,9 @@ html[dir='ltr'] .banner-arrow--next {
     position: relative;
     inset: auto;
     width: 100%;
-    min-height: 280px;
+    min-height: 248px;
     justify-content: flex-end;
-    padding: 1.35rem 1.15rem 3.55rem;
+    padding: 1.15rem 1.05rem 3.35rem;
     background: linear-gradient(
       180deg,
       rgba(6, 10, 22, 0.38) 0%,
@@ -1803,20 +1848,20 @@ html[dir='ltr'] .banner-arrow--next {
   }
 
   .banner-badge {
-    font-size: 0.74rem;
-    padding: 0.25rem 0.65rem;
-    margin-bottom: 0.65rem;
+    font-size: 0.72rem;
+    padding: 0.22rem 0.6rem;
+    margin-bottom: 0.55rem;
   }
 
   .banner-title {
-    font-size: clamp(1.08rem, 4.6vw, 1.32rem);
-    line-height: 1.48;
-    margin-bottom: 0.5rem;
+    font-size: clamp(1rem, 4.3vw, 1.2rem);
+    line-height: 1.46;
+    margin-bottom: 0.45rem;
   }
 
   .banner-subtitle {
-    font-size: 0.86rem;
-    line-height: 1.72;
+    font-size: 0.82rem;
+    line-height: 1.66;
   }
 
   .banner-arrow {
@@ -1921,50 +1966,128 @@ html[dir='ltr'] .banner-arrow--next {
   }
 
   .prose-article {
-    font-size: 0.98rem;
-    line-height: 1.92;
+    font-size: 0.92rem;
+    line-height: 1.84;
   }
 
   .prose-article h2 {
-    font-size: 1.22rem;
-    margin-top: 1.75rem;
+    font-size: 1.12rem;
+    margin-top: 1.55rem;
   }
 
   .prose-article h3 {
-    font-size: 1.06rem;
+    font-size: 1rem;
+  }
+
+  /* Optimized mobile Training cards, syllabus accordion & mode selector */
+  .training-list {
+    gap: 0.95rem;
   }
 
   .training-card-head {
-    padding: 1rem 1.05rem;
-    gap: 0.75rem;
+    padding: 0.9rem 0.95rem;
+    gap: 0.65rem;
+  }
+
+  .training-title-trigger {
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .training-index-badge {
+    width: 1.95rem;
+    height: 1.95rem;
+    font-size: 0.76rem;
+    border-radius: 0.52rem;
+    margin-top: 0.12rem;
+  }
+
+  .training-title-text {
+    font-size: 0.95rem;
+    line-height: 1.52;
+  }
+
+  .training-meta-row {
+    gap: 0.4rem 0.75rem;
+    font-size: 0.76rem;
+    margin-top: 0.1rem;
+  }
+
+  .training-chevron {
+    width: 1.9rem;
+    height: 1.9rem;
+    margin-top: 0.12rem;
   }
 
   .training-dropdown-panel {
-    padding: 0 1.05rem 1.1rem;
+    padding: 0 0.95rem 0.95rem;
+  }
+
+  .training-course-summary {
+    margin: 0.8rem 0 0.85rem;
+    font-size: 0.88rem;
+    line-height: 1.75;
   }
 
   .training-syllabus-box {
-    padding: 0.95rem 1rem;
+    padding: 0.85rem 0.9rem;
+    margin-top: 0.65rem;
+    border-radius: 0.72rem;
+  }
+
+  .training-syllabus-heading {
+    font-size: 0.9rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .training-syllabus-list {
+    gap: 0.5rem;
+  }
+
+  .training-syllabus-item {
+    font-size: 0.86rem;
+    line-height: 1.68;
+    gap: 0.45rem;
   }
 
   .training-action-footer {
-    padding: 0.9rem 1.05rem;
+    padding: 0.85rem 0.95rem;
     flex-direction: column;
     align-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .training-mode-hint {
+    font-size: 0.79rem;
+    line-height: 1.5;
   }
 
   .training-register-controls {
     width: 100%;
     margin-inline-start: 0;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
   }
 
   .training-tags-bar {
-    flex: 0 1 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    width: 100%;
+    gap: 0.45rem;
+  }
+
+  .training-mode-tag {
+    width: 100%;
+    justify-content: center;
+    min-height: 2.3rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
   }
 
   .training-register-controls .btn {
-    flex: 1 1 auto;
+    width: 100%;
+    min-height: 2.5rem;
   }
 
   .site-footer {
@@ -1981,6 +2104,10 @@ html[dir='ltr'] .banner-arrow--next {
 
 /* Small & Compact Phones (<= 480px) */
 @media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
   .hero-actions,
   .cta-actions,
   .form-actions {
@@ -2032,12 +2159,8 @@ html[dir='ltr'] .banner-arrow--next {
     padding-inline-end: 0.8rem;
   }
 
-  .brand-title {
-    font-size: 0.82rem;
-  }
-
-  .nav-actions .icon-btn span {
-    display: none;
+  .brand-logo-img {
+    height: 1.78rem;
   }
 }
 
